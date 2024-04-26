@@ -1,8 +1,16 @@
+const PERMISSIONS = {
+  master: 1,
+  gateManagements: 2,
+  canteenManagement: 3,
+  userManagements: 4,
+  reports: 5,
+};
+
 const USERTYPE = {
   admin: 1,
   security: 2,
   canteen: 3,
-  drop: 4,
+  superAdmin: 4,
 };
 
 const STATUSCODE = {
@@ -18,6 +26,7 @@ const STATUSCODE = {
 };
 
 module.exports = {
+  PERMISSIONS,
   USERTYPE,
   STATUSCODE,
 };
