@@ -1,0 +1,34 @@
+{
+  "success": "success",
+  "failure": "failure",
+  "operation_failed": "Operation_failed",
+  "listed_success": "Data Retrieved Successfully",
+  "listed_failure": "Failed to retrieve data",
+
+  "user_creation_success": "User Created Successfully",
+  "user_creation_failure": "Failed to Create User",
+  "user_updation_success": "User Updated Successfully",
+  "user_updation_failure": "Failed to Update User",
+  "user_deletion_success": "User Deleted Successfully",
+  "user_deletion_failure": "Failed to delete User",
+
+  "userAccessPermission_creation_success": "User Access Permission Created Successfully",
+  "userAccessPermission_creation_failure": "Failed to Create User Access Permission",
+  "userAccessPermission_updation_success": "User Access Permission Updated Successfully",
+  "userAccessPermission_updation_failure": "Failed to Update User Access Permission",
+  "userAccessPermission_deletion_success": "User Access Permission Deleted Successfully",
+  "userAccessPermission_deletion_failure": "Failed to delete User Access Permission",
+
+  "accessPermission_creation_success": "Access Permission Created Successfully",
+  "accessPermission_creation_failure": "Failed to Create Access Permission",
+  "accessPermission_updation_success": "Access Permission Updated Successfully",
+  "accessPermission_updation_failure": "Failed to Update Access Permission",
+  "accessPermission_deletion_success": "Access Permission Deleted Successfully",
+  "accessPermission_deletion_failure": "Failed to delete Access Permission",
+
+  "upload_success": "Image uploaded successfully",
+  "upload_failure": "Failed to upload the image",
+  "file_deleted": "File deleted successfully",
+  "file_upload_success": "file uploaded successfully",
+  "upload_file_failure": "Failed to upload the files"
+}

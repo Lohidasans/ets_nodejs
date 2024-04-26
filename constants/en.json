@@ -1,0 +1,27 @@
+{
+  "loginSuccessfully": "Login Successfully!",
+  "loginFailed": "Login Failed!",
+  "invalid": "Invalid UserName or  Password!",
+  "passwordMisMatched": "Password And Confirm Password Are MisMatched!",
+
+  "SendOtpMobileNumber": "Please Send the Otp With MobileNumber",
+  "EnterOtpTime": "Please Enter the Correct OTP Within One Minute",
+  "wrongOtp": "Otp Is Wrong, Please Enter the Correct Otp",
+  "OTPSent": "Otp Send Successfully!",
+  "OTPVerified": "Otp Verified Successfully",
+
+  "alreadyMobile": "MobileNumber already Exist",
+  "existUser": "Username already exist",
+
+  "permissionDenied": "Access Denied. You Don't have permission!",
+  "accessDenied": "Access Denied. No token provided",
+  "invalidToken": "Invalid Token",
+  "permission": "Already have this permission!",
+  "accessAdded": "Successfully Added Access Permissions To User",
+
+  "userNotFoundWithId": "User Not Found With this Id",
+  "userNotFound": "User Not Found",
+  "imageNotFoundWithId": "ImageNotFound",
+  "userTypeNotFound": "userType Not Found,Please Update Your UserType",
+  "dataNotFound": "No Data available"
+}
