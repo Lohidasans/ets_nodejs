@@ -22,6 +22,7 @@
   "userNotFoundWithId": "User Not Found With this Id",
   "userNotFound": "User Not Found",
   "accessPermissionNotFound":"Access Permission not found",
+  "teamNotFound": "Team Not Found",
   "imageNotFoundWithId": "Image Not Found",
   "userTypeNotFound": "userType Not Found,Please Update Your UserType",
   "dataNotFound": "No Data available"

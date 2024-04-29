@@ -25,6 +25,20 @@
   "accessPermission_updation_failure": "Failed to Update Access Permission",
   "accessPermission_deletion_success": "Access Permission Deleted Successfully",
   "accessPermission_deletion_failure": "Failed to delete Access Permission",
+  
+  "team_creation_success": "Team Created Successfully",
+  "team_creation_failure": "Failed to Create Team",
+  "team_updation_success": "Team Updated Successfully",
+  "team_updation_failure": "Failed to Update Team",
+  "team_deletion_success": "Team Deleted Successfully",
+  "team_deletion_failure": "Failed to delete Team",
+
+  "subTeam_creation_success": "SubTeam Created Successfully",
+  "subTeam_creation_failure": "Failed to Create SubTeam",
+  "subTeam_updation_success": "SubTeam Updated Successfully",
+  "subTeam_updation_failure": "Failed to Update SubTeam",
+  "subTeam_deletion_success": "SubTeam Deleted Successfully",
+  "subTeam_deletion_failure": "Failed to delete SubTeam",
 
   "upload_success": "Image uploaded successfully",
   "upload_failure": "Failed to upload the image",
