@@ -17,11 +17,12 @@
   "accessDenied": "Access Denied. No token provided",
   "invalidToken": "Invalid Token",
   "permission": "Already have this permission!",
-  "accessAdded": "Successfully Added Access Permissions To User",
+  "accessAdded": "Successfully Added Access Permissions to the User",
 
   "userNotFoundWithId": "User Not Found With this Id",
   "userNotFound": "User Not Found",
-  "imageNotFoundWithId": "ImageNotFound",
+  "accessPermissionNotFound":"Access Permission not found",
+  "imageNotFoundWithId": "Image Not Found",
   "userTypeNotFound": "userType Not Found,Please Update Your UserType",
   "dataNotFound": "No Data available"
 }

@@ -8,9 +8,9 @@ const PERMISSIONS = {
 
 const USERTYPE = {
   admin: 1,
-  security: 2,
-  canteen: 3,
-  superAdmin: 4,
+  superAdmin: 2,
+  security: 3,
+  canteen: 4,
 };
 
 const STATUSCODE = {
