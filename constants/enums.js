@@ -13,6 +13,22 @@ const USERTYPE = {
   canteen: 4,
 };
 
+const TEAMTYPE = {
+  individual: 1,
+  grouped: 2
+}
+
+const GUESTTYPE = {
+  customers: 1, 
+  others: 2
+}
+
+const SHIFT = {
+  morning: 1,
+  afternoon: 2,
+  night : 3
+}
+
 const STATUSCODE = {
   ok: 200,
   created: 201,
@@ -28,5 +44,8 @@ const STATUSCODE = {
 module.exports = {
   PERMISSIONS,
   USERTYPE,
+  TEAMTYPE,
+  GUESTTYPE,
+  SHIFT,
   STATUSCODE,
 };
