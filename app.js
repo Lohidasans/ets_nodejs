@@ -13,6 +13,8 @@ const userAccessPermissionRouter = require("./routes/userServiceRoute/UserAccess
 const teamRouter = require("./routes/teamServiceRoute/teamRouters");
 const subTeamRouter = require("./routes/teamServiceRoute/subTeamRouters");
 
+//guestRouters
+const guestRouter = require("./routes/guestServiceRoute/guestRouters");
 const cors = require("cors");
 const db = require("./config/dbConfig");
 
@@ -39,6 +41,9 @@ app.use("/", userAccessPermissionRouter);
 //teamRouters
 app.use("/", teamRouter);
 app.use("/", subTeamRouter);
+
+//guestRouters
+app.use("/", guestRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
