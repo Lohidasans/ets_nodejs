@@ -6,7 +6,6 @@ const RestAPI = require("../../constants/enums");
 const createTeam = async (req, res) => {
     try {
         const now = new Date().toISOString();
-        console.log("saddddddddd")
         const teamData = req.body;
         const teamQuery = await db.query(
             `INSERT INTO teams (team_name, created_at, updated_at) VALUES ('${teamData.team_name}', '${now}', '${now}') RETURNING *`

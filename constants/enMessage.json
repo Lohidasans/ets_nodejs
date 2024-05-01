@@ -47,6 +47,13 @@
   "guest_deletion_success": "Team Deleted Successfully",
   "guest_deletion_failure": "Failed to delete Team",
 
+  "employee_profile_creation_success": "Employee Profile Created Successfully",
+  "employee_profile_creation_failure": "Failed to Create Employee Profile",
+  "employee_profile_updation_success": "Employee Profile Updated Successfully",
+  "employee_profile_updation_failure": "Failed to Update Employee Profile",
+  "employee_profile_deletion_success": "Employee Profile Deleted Successfully",
+  "employee_profile_deletion_failure": "Failed to delete Employee Profile",
+
   "upload_success": "Image uploaded successfully",
   "upload_failure": "Failed to upload the image",
   "file_deleted": "File deleted successfully",
