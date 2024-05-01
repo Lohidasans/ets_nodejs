@@ -15,6 +15,12 @@ const subTeamRouter = require("./routes/teamServiceRoute/subTeamRouters");
 
 //guestRouters
 const guestRouter = require("./routes/guestServiceRoute/guestRouters");
+
+//employeeRouters
+const employeeRouter = require("./routes/employeeServiceRoute/employeeProfileRouters");
+
+
+
 const cors = require("cors");
 const db = require("./config/dbConfig");
 
@@ -44,6 +50,9 @@ app.use("/", subTeamRouter);
 
 //guestRouters
 app.use("/", guestRouter);
+
+//employeeRouters
+app.use("/", employeeRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
