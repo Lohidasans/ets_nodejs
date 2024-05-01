@@ -137,6 +137,6 @@ module.exports = {
     createEmployeeProfile,
     getEmployeeProfileById,
     getAllEmployeeProfile,
-    replaceEmployeeProfile,
+    //replaceEmployeeProfile,
     deleteEmployeeProfile,
 };
