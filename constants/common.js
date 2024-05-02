@@ -17,22 +17,22 @@ const user_type_data = [
   },
 ];
 
-const shift = [
+const shift_data = [
   {
     id: 1,
-    user_type: "Morning",
+    schedule_time: "Morning",
   },
   {
     id: 2,
-    user_type: "Afternoon",
+    schedule_time: "Afternoon",
   },
   {
     id: 3,
-    user_type: "Night",
+    schedule_time: "Night",
   },
 ];
 
 module.exports = {
   user_type_data,
-  shift,
+  shift_data,
 };
