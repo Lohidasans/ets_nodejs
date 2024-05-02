@@ -14,10 +14,10 @@ router.get(
     "/api/getEmployeeProfile/:id",
     employeeProfileService.getEmployeeProfileById
 );
-// router.put(
-//     "/api/replaceEmployeeProfile/:id",
-//     employeeProfileService.replaceEmployeeProfile,
-// );
+router.put(
+    "/api/replaceEmployeeProfile/:id",
+    employeeProfileService.replaceEmployeeProfile,
+);
 router.delete(
     "/api/deleteEmployeeProfile/:id",
     employeeProfileService.deleteEmployeeProfile,
