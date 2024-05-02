@@ -1,9 +1,11 @@
 const PERMISSIONS = {
-  master: 1,
-  gateManagements: 2,
-  canteenManagement: 3,
-  userManagements: 4,
-  reports: 5,
+  dashboard: 1,
+  master: 2,
+  gateManagements: 3,
+  canteenManagement: 4,
+  userManagements: 5,
+  securityManagement: 6,
+  reports: 7,
 };
 
 const USERTYPE = {
@@ -15,19 +17,19 @@ const USERTYPE = {
 
 const TEAMTYPE = {
   individual: 1,
-  grouped: 2
-}
+  grouped: 2,
+};
 
 const GUESTTYPE = {
-  customers: 1, 
-  others: 2
-}
+  customers: 1,
+  others: 2,
+};
 
 const SHIFT = {
   morning: 1,
   afternoon: 2,
-  night : 3
-}
+  night: 3,
+};
 
 const STATUSCODE = {
   ok: 200,
