@@ -78,7 +78,7 @@ const getAllGuest =  async (req, res) => {
         return res.status(RestAPI.STATUSCODE.ok).send({
             statusCode: RestAPI.STATUSCODE.ok,
             message: enMessage.listed_success,
-            category: allGuestData,
+            guestDetails: allGuestData,
         });
     } catch (err) {
         console.log("Error :", err);
@@ -115,7 +115,7 @@ const replaceGuest = async (req, res) => {
             .send({
                 statusCode: RestAPI.STATUSCODE.ok,
                 message: enMessage.guest_updation_success,
-                category: updatedData.rows[0],
+                guestDetails: updatedData.rows[0],
             });
     } catch (err) {
         console.log("Error :", err);

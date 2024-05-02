@@ -19,7 +19,7 @@ const guestRouter = require("./routes/guestServiceRoute/guestRouters");
 //employeeRouters
 const employeeProfileRouter = require("./routes/employeeServiceRoute/employeeProfileRouters");
 const employeeJobRouter = require("./routes/employeeServiceRoute/employeeJobRouters");
-
+const employeeIdProofRouter = require("./routes/employeeServiceRoute/employeeIdProofRouters");
 
 
 const cors = require("cors");
@@ -54,7 +54,9 @@ app.use("/", guestRouter);
 
 //employeeRouters
 app.use("/", employeeProfileRouter);
-app.use("/", employeeJobRouter)
+app.use("/", employeeJobRouter);
+app.use("/", employeeIdProofRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

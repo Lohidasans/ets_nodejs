@@ -60,7 +60,7 @@ const getAllEmployeeProfile = async (req, res) => {
     return res.status(RestAPI.STATUSCODE.ok).send({
       statusCode: RestAPI.STATUSCODE.ok,
       message: enMessage.listed_success,
-      category: allEmployeeProfiles.rows,
+      profileDetails: allEmployeeProfiles.rows,
     });
   } catch (err) {
     console.log("Error :", err);
@@ -96,7 +96,7 @@ const replaceEmployeeProfile = async (req, res) => {
     return res.status(RestAPI.STATUSCODE.ok).send({
       statusCode: RestAPI.STATUSCODE.ok,
       message: enMessage.employee_profile_updation_success,
-      category: updatedData.rows[0],
+      profileDetails: updatedData.rows[0],
     });
   } catch (err) {
     console.log("Error :", err);

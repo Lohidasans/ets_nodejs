@@ -57,7 +57,7 @@ const getAllTeam = async (req, res) => {
         return res.status(RestAPI.STATUSCODE.ok).send({
             statusCode: RestAPI.STATUSCODE.ok,
             message: enMessage.listed_success,
-            category: allTeams.rows,
+            teamDetails: allTeams.rows,
         });
     } catch (err) {
         console.log("Error :", err);
@@ -93,7 +93,7 @@ const replaceTeam = async (req, res) => {
             .send({
                 statusCode: RestAPI.STATUSCODE.ok,
                 message: enMessage.team_updation_success,
-                category: updatedData.rows[0],
+                teamDetails: updatedData.rows[0],
             });
     } catch (err) {
         console.log("Error :", err);
