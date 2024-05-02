@@ -17,7 +17,8 @@ const subTeamRouter = require("./routes/teamServiceRoute/subTeamRouters");
 const guestRouter = require("./routes/guestServiceRoute/guestRouters");
 
 //employeeRouters
-const employeeRouter = require("./routes/employeeServiceRoute/employeeProfileRouters");
+const employeeProfileRouter = require("./routes/employeeServiceRoute/employeeProfileRouters");
+const employeeJobRouter = require("./routes/employeeServiceRoute/employeeJobRouters");
 
 
 
@@ -52,7 +53,8 @@ app.use("/", subTeamRouter);
 app.use("/", guestRouter);
 
 //employeeRouters
-app.use("/", employeeRouter);
+app.use("/", employeeProfileRouter);
+app.use("/", employeeJobRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

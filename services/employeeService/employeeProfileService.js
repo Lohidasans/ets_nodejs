@@ -8,7 +8,7 @@ const createEmployeeProfile = async (req, res) => {
     const now = new Date().toISOString();
     const employeeProfileData = req.body;
     const employeeProfileQuery = await db.query(
-      `INSERT INTO employee_profiles (name, date_of_birth, email_id, phone_no, state, city, address, pincode, thumb_image_url, image_url, team_id, sub_team_id, employee_category, date_of_joining, shift, created_at, updated_at) VALUES ('${employeeProfileData.name}','${employeeProfileData.date_of_birth}','${employeeProfileData.email_id}','${employeeProfileData.phone_no}','${employeeProfileData.state}','${employeeProfileData.city}','${employeeProfileData.address}','${employeeProfileData.pincode}','${employeeProfileData.thumb_image_url}','${employeeProfileData.image_url}','${employeeProfileData.team_id}','${employeeProfileData.sub_team_id}','${employeeProfileData.employee_category}','${employeeProfileData.date_of_joining}','${employeeProfileData.shift}', '${now}', '${now}') RETURNING *`
+      `INSERT INTO employee_profiles (name, date_of_birth, email_id, phone_no, state, city, address, pincode, thumb_image_url, image_url, team_id, sub_team_id, employee_category, employee_id, date_of_joining, shift, created_at, updated_at) VALUES ('${employeeProfileData.name}','${employeeProfileData.date_of_birth}','${employeeProfileData.email_id}','${employeeProfileData.phone_no}','${employeeProfileData.state}','${employeeProfileData.city}','${employeeProfileData.address}','${employeeProfileData.pincode}','${employeeProfileData.thumb_image_url}','${employeeProfileData.image_url}','${employeeProfileData.team_id}','${employeeProfileData.sub_team_id}','${employeeProfileData.employee_category}','${employeeProfileData.employee_id}','${employeeProfileData.date_of_joining}','${employeeProfileData.shift}', '${now}', '${now}') RETURNING *`
     );
     return res.status(RestAPI.STATUSCODE.ok).send({
       statusCode: RestAPI.STATUSCODE.ok,
@@ -94,11 +94,11 @@ const replaceEmployeeProfile = async (req, res) => {
       [req.params.id]
     );
     return res.status(RestAPI.STATUSCODE.ok).send({
-        statusCode: RestAPI.STATUSCODE.ok,
-        message: enMessage.employee_profile_updation_success,
-        category: updatedData.rows[0],
-        });
-    } catch (err) {
+      statusCode: RestAPI.STATUSCODE.ok,
+      message: enMessage.employee_profile_updation_success,
+      category: updatedData.rows[0],
+    });
+  } catch (err) {
     console.log("Error :", err);
     return res.status(RestAPI.STATUSCODE.internalServerError).send({
       statusCode: RestAPI.STATUSCODE.internalServerError,
