@@ -31,6 +31,11 @@ const SHIFT = {
   night: 3,
 };
 
+const SECURITYSTATUS = {
+  allowInside: 1,
+  allowOutside: 2,
+}
+
 const STATUSCODE = {
   ok: 200,
   created: 201,
@@ -49,5 +54,6 @@ module.exports = {
   TEAMTYPE,
   GUESTTYPE,
   SHIFT,
+  SECURITYSTATUS,
   STATUSCODE,
 };
