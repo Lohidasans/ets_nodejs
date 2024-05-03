@@ -43,8 +43,47 @@ const guest_type_data = [
   },
 ];
 
+const team_type_data = [
+  {
+    id: 1,
+    team_type: "Individual",
+  },
+  {
+    id: 2,
+    team_type: "Grouped",
+  },
+];
+
+const team_data = [
+  {
+    id: 1,
+    team: "Admin",
+  },
+  {
+    id: 2,
+    team: "Workshop",
+  },
+  {
+    id: 3,
+    team: "Polishing",
+  },
+  {
+    id: 4,
+    team: "Security",
+  },
+  {
+    id: 5,
+    team: "Canteen",
+  },
+  {
+    id: 6,
+    team: "Supervisor",
+  },
+];
 module.exports = {
   user_type_data,
   shift_data,
   guest_type_data,
+  team_type_data,
+  team_data,
 };

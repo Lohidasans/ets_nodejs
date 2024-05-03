@@ -4,6 +4,8 @@ const {
   user_type_data,
   shift_data,
   guest_type_data,
+  team_data,
+  team_type_data,
 } = require("../../constants/common");
 
 const getAllUserTypes = async (req, res) => {
@@ -30,8 +32,26 @@ const getAllGuestTypesData = async (req, res) => {
   });
 };
 
+const getAllTeamData = async (req, res) => {
+  return await res.status(RestAPI.STATUSCODE.ok).send({
+    statusCode: RestAPI.STATUSCODE.ok,
+    message: enMessage.listed_success,
+    teamData: team_data,
+  });
+};
+
+const getAllTeamTypesData = async (req, res) => {
+  return await res.status(RestAPI.STATUSCODE.ok).send({
+    statusCode: RestAPI.STATUSCODE.ok,
+    message: enMessage.listed_success,
+    teamData: team_type_data,
+  });
+};
+
 module.exports = {
   getAllUserTypes,
   getAllShiftData,
   getAllGuestTypesData,
+  getAllTeamData,
+  getAllTeamTypesData,
 };
