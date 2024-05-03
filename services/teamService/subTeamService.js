@@ -1,4 +1,5 @@
 const db = require("../../config/dbConfig");
+const { team_type_data, team_data } = require("../../constants/common");
 const en = require("../../constants/en.json");
 const enMessage = require("../../constants/enMessage.json");
 const RestAPI = require("../../constants/enums");
@@ -111,6 +112,26 @@ const getAllSubTeam = async (req, res) => {
     const result = await db.query(queryString);
     let allTeams = result.rows;
 
+    allTeams = allTeams?.map((item, index) => {
+      let teamTypeName = team_type_data.find(
+        (typeItem) => typeItem.id === item.team_type_id
+      );
+      return {
+        ...item,
+        sNo: index + 1,
+        team_type_name: teamTypeName.team_type,
+      };
+    });
+
+    allTeams = allTeams?.map((item) => {
+      let teamName = team_data?.find(
+        (teamItem) => teamItem.id === item.team_id
+      );
+      return {
+        ...item,
+        team_name: teamName.team,
+      };
+    });
     var filterQuery = req.query;
     // search added
     if (Object.keys(filterQuery).length !== 0) {
@@ -129,12 +150,12 @@ const getAllSubTeam = async (req, res) => {
         );
       }
       if (filterQuery.team_type_id) {
-          allTeams = allTeams.filter(
+        allTeams = allTeams.filter(
           (item) => item.team_type_id == filterQuery.team_type_id
         );
       }
       if (filterQuery.team_name) {
-          allTeams = allTeams.filter(
+        allTeams = allTeams.filter(
           (item) => item.team_name == filterQuery.team_name
         );
       }
