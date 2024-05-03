@@ -32,7 +32,19 @@ const shift_data = [
   },
 ];
 
+const guest_type_data = [
+  {
+    id: 1,
+    guest_type: "Customer",
+  },
+  {
+    id: 2,
+    guest_type: "Others",
+  },
+];
+
 module.exports = {
   user_type_data,
   shift_data,
+  guest_type_data,
 };
