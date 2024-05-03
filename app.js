@@ -20,6 +20,8 @@ const guestRouter = require("./routes/guestServiceRoute/guestRouters");
 const employeeProfileRouter = require("./routes/employeeServiceRoute/employeeProfileRouters");
 const employeeJobRouter = require("./routes/employeeServiceRoute/employeeJobRouters");
 const employeeIdProofRouter = require("./routes/employeeServiceRoute/employeeIdProofRouters");
+const employeeMobileRouter = require("./routes/employeeServiceRoute/employeeMobileRouters");
+const employeeOrnamentRouter = require("./routes/employeeServiceRoute/employeeOrnamentRouters");
 
 //commonServiceRoute
 const commonServiceRoute = require("./routes/commonServiceRoute/commonServiceRoute");
@@ -58,6 +60,8 @@ app.use("/", guestRouter);
 app.use("/", employeeProfileRouter);
 app.use("/", employeeJobRouter);
 app.use("/", employeeIdProofRouter);
+app.use("/", employeeMobileRouter);
+app.use("/", employeeOrnamentRouter);
 
 //Common
 app.use("/", commonServiceRoute);

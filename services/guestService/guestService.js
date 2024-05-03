@@ -73,6 +73,9 @@ const getAllGuest =  async (req, res) => {
             if (filterQuery.company) {
                 allGuestData = allGuestData.filter((item) => item.company == filterQuery.company);
             }
+            if (filterQuery.guest_id) {
+                allGuestData = allGuestData.filter((item) => item.guest_id == filterQuery.guest_id);
+            }
         }
 
         return res.status(RestAPI.STATUSCODE.ok).send({
