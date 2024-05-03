@@ -80,10 +80,22 @@ const team_data = [
     team: "Supervisor",
   },
 ];
+
+const state_data = [
+  {
+    id: 1,
+    state: "TamilNadu",
+  },
+  {
+    id: 2,
+    state: "Karnataka",
+  },
+];
 module.exports = {
   user_type_data,
   shift_data,
   guest_type_data,
   team_type_data,
   team_data,
+  state_data,
 };
