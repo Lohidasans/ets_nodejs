@@ -57,6 +57,15 @@ module.exports = {
       shift: {
         type: Sequelize.STRING
       },
+      breakfast: {
+        type: Sequelize.BOOLEAN
+      },
+      lunch: {
+        type: Sequelize.BOOLEAN
+      },
+      dinner: {
+        type: Sequelize.BOOLEAN
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE

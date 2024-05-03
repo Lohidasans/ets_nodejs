@@ -29,7 +29,10 @@ module.exports = (sequelize, DataTypes) => {
     employee_category: DataTypes.STRING,
     employee_id: DataTypes.STRING,
     date_of_joining: DataTypes.DATE,
-    shift: DataTypes.STRING
+    shift: DataTypes.STRING,
+    breakfast: DataTypes.BOOLEAN,
+    lunch: DataTypes.BOOLEAN,
+    dinner: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'employee_profile',
