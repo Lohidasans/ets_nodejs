@@ -129,10 +129,7 @@ const getAllUsers = async (req, res) => {
             .includes(filterQuery.searchString?.toLowerCase()) ||
           user.name
             .toLowerCase()
-            .includes(filterQuery.searchString?.toLowerCase()) ||
-          user.user_type
-            .toLowerCase()
-            .includes(filterQuery.searchString?.toLowerCase())
+            .includes(filterQuery.searchString?.toLowerCase()) 
       );
 
       return res.status(STATUSCODE.ok).send({
