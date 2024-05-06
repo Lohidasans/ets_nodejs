@@ -154,9 +154,9 @@ const getAllSubTeam = async (req, res) => {
           (item) => item.team_type_id == filterQuery.team_type_id
         );
       }
-      if (filterQuery.team_name) {
+      if (filterQuery.team_id) {
         allTeams = allTeams.filter(
-          (item) => item.team_name == filterQuery.team_name
+          (item) => item.team_id == filterQuery.team_id
         );
       }
     }
