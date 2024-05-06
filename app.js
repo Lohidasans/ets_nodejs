@@ -23,6 +23,9 @@ const employeeIdProofRouter = require("./routes/employeeServiceRoute/employeeIdP
 const employeeMobileRouter = require("./routes/employeeServiceRoute/employeeMobileRouters");
 const employeeOrnamentRouter = require("./routes/employeeServiceRoute/employeeOrnamentRouters");
 
+//securityRouters
+const securityRouter = require("./routes/securityServiceRoute/securityRouters");
+
 //commonServiceRoute
 const commonServiceRoute = require("./routes/commonServiceRoute/commonServiceRoute");
 
@@ -62,6 +65,9 @@ app.use("/", employeeJobRouter);
 app.use("/", employeeIdProofRouter);
 app.use("/", employeeMobileRouter);
 app.use("/", employeeOrnamentRouter);
+
+//securityRouters
+app.use("/", securityRouter);
 
 //Common
 app.use("/", commonServiceRoute);

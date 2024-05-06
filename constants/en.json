@@ -31,6 +31,7 @@
   "employeePreviousJobNotFound": "Employee Previous Job details not found",
   "employeeIdProofNotFound": "Employee Id Proof not found",
   "employeeOrnamentNotFound": "Employee Ornaments not found",
+  "securityNotFound": "Security Not Found",
   "imageNotFoundWithId": "Image Not Found",
   "userTypeNotFound": "userType Not Found,Please Update Your UserType",
   "dataNotFound": "No Data available"

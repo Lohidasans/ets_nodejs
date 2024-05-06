@@ -5,7 +5,7 @@ const en = require("../../constants/en.json");
 const { userRequestValidator } = require("../../validator/userValidator");
 const searchTextFields = require("../../utils/userFilter");
 const { encoder, decoder } = require("../../utils/encoder&decoder");
-const { STATUSCODE, USERTYPE } = require("../../constants/enums");
+const { STATUSCODE } = require("../../constants/enums");
 const enMessage = require("../../constants/enMessage.json");
 
 

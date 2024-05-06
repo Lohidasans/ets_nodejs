@@ -8,30 +8,8 @@ const PERMISSIONS = {
   reports: 7,
 };
 
-const USERTYPE = {
-  admin: 1,
-  superAdmin: 2,
-  security: 3,
-  canteen: 4,
-};
-
-const TEAMTYPE = {
-  individual: 1,
-  grouped: 2,
-};
-
-const GUESTTYPE = {
-  customers: 1,
-  others: 2,
-};
-
-const SHIFT = {
-  morning: 1,
-  afternoon: 2,
-  night: 3,
-};
-
 const SECURITYSTATUS = {
+  notYetChecked: 0,
   allowInside: 1,
   allowOutside: 2,
 }
@@ -50,10 +28,6 @@ const STATUSCODE = {
 
 module.exports = {
   PERMISSIONS,
-  USERTYPE,
-  TEAMTYPE,
-  GUESTTYPE,
-  SHIFT,
   SECURITYSTATUS,
   STATUSCODE,
 };

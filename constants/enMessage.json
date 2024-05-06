@@ -82,6 +82,13 @@
   "employee_idProof_deletion_success": "Employee Id Proof Deleted Successfully",
   "employee_idProof_deletion_failure": "Failed to delete Employee Id Proof",
 
+  "security_management_creation_success": "Security Management Created Successfully",
+  "security_management_creation_failure": "Failed to Create Security Management",
+  "security_management_updation_success": "Security Management Updated Successfully",
+  "security_management_updation_failure": "Failed to Update Security Management",
+  "security_management_deletion_success": "Security Management Deleted Successfully",
+  "security_management_deletion_failure": "Failed to delete Security Management",
+
   "upload_success": "Image uploaded successfully",
   "upload_failure": "Failed to upload the image",
   "file_deleted": "File deleted successfully",
