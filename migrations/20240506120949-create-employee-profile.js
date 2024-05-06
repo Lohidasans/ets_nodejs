@@ -55,7 +55,7 @@ module.exports = {
         type: Sequelize.DATE
       },
       shift: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
       },
       breakfast: {
         type: Sequelize.BOOLEAN

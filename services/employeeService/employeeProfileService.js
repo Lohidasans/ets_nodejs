@@ -2,6 +2,7 @@ const db = require("../../config/dbConfig");
 const en = require("../../constants/en.json");
 const enMessage = require("../../constants/enMessage.json");
 const RestAPI = require("../../constants/enums");
+const { shift_data  } = require("../../constants/common");
 
 const createEmployeeProfile = async (req, res) => {
   try {
@@ -55,12 +56,31 @@ const getEmployeeProfileById = async (req, res) => {
 const getAllEmployeeProfile = async (req, res) => {
   try {
     const allEmployeeProfiles = await db.query(
-      `SELECT * FROM employee_profiles ORDER BY id`
-    );
+           `SELECT
+            employee_profiles.*,
+            teams.team_name AS team_name,
+            sub_teams.sub_team AS sub_team_name
+            FROM employee_profiles
+            INNER JOIN teams ON employee_profiles.team_id = teams.id
+            INNER JOIN sub_teams ON employee_profiles.team_id = sub_teams.id
+            GROUP BY teams.team_name,
+            sub_teams.sub_team,
+            employee_profiles.id
+            ORDER BY employee_profiles.id
+        `);
+    // Map function to add shift_time to each profile
+    const profilesWithShiftTime = allEmployeeProfiles.rows.map(profile => {
+      const shift = shift_data.find(shift => shift.id === profile.shift);
+      return {
+        ...profile,
+        shift_name: shift ? shift.schedule_time : null
+      };
+    });
+
     return res.status(RestAPI.STATUSCODE.ok).send({
       statusCode: RestAPI.STATUSCODE.ok,
       message: enMessage.listed_success,
-      profileDetails: allEmployeeProfiles.rows,
+      profileDetails: profilesWithShiftTime,
     });
   } catch (err) {
     console.log("Error :", err);
