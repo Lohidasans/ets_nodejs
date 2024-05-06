@@ -7,6 +7,11 @@ module.exports = {
       "access_permissions",
       [
         {
+          permission: "Dashboard",
+          created_at: new Date(),
+          updated_at: new Date()
+        },
+        {
           permission: "Master",
           created_at: new Date(),
           updated_at: new Date()
@@ -23,6 +28,11 @@ module.exports = {
         },
         {
           permission: "User Managements",
+          created_at: new Date(),
+          updated_at: new Date()
+        },
+        {
+          permission: "Security Management",
           created_at: new Date(),
           updated_at: new Date()
         },

@@ -63,7 +63,7 @@ const getAllGuest = async (req, res) => {
       return {
         ...item,
         sNo: index + 1,
-        guest_type: guestTypeName.guest_type,
+        guest_type_name: guestTypeName.guest_type,    
       };
     });
 

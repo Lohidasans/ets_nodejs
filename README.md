@@ -18,4 +18,5 @@ sequelize seed:generate --name add-access_permissions
 
 # To run the seeder file
 
-npx sequelize db:seed:all
+npx sequelize db:seed:all   
+npx sequelize db:seed --seed .\seeders\20240426073225-add-access_permissions.js
