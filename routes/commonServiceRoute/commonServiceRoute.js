@@ -8,5 +8,6 @@ router.get("/api/getAllGuestTypesDetail", commonService.getAllGuestTypesData);
 router.get("/api/getAllTeamTypesDetail", commonService.getAllTeamTypesData);
 router.get("/api/getAllTeamDetail", commonService.getAllTeamData);
 router.get("/api/getAllStates", commonService.getAllStates);
+router.get("/api/getAllCategories", commonService.getAllCategories);
 
 module.exports = router;

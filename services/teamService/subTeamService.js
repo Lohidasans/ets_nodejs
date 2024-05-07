@@ -123,15 +123,6 @@ const getAllSubTeam = async (req, res) => {
       };
     });
 
-    allTeams = allTeams?.map((item) => {
-      let teamName = team_data?.find(
-        (teamItem) => teamItem.id === item.team_id
-      );
-      return {
-        ...item,
-        team_name: teamName.team,
-      };
-    });
     var filterQuery = req.query;
     // search added
     if (Object.keys(filterQuery).length !== 0) {

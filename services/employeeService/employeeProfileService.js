@@ -2,7 +2,7 @@ const db = require("../../config/dbConfig");
 const en = require("../../constants/en.json");
 const enMessage = require("../../constants/enMessage.json");
 const RestAPI = require("../../constants/enums");
-const { shift_data  } = require("../../constants/common");
+const { shift_data } = require("../../constants/common");
 
 const createEmployeeProfile = async (req, res) => {
   try {
@@ -55,8 +55,8 @@ const getEmployeeProfileById = async (req, res) => {
 
 const getAllEmployeeProfile = async (req, res) => {
   try {
-    const allEmployeeProfiles = await db.query(
-           `SELECT
+    var allEmployeeProfiles = await db.query(
+      `SELECT
             employee_profiles.*,
             teams.team_name AS team_name,
             sub_teams.sub_team AS sub_team_name
@@ -69,13 +69,49 @@ const getAllEmployeeProfile = async (req, res) => {
             ORDER BY employee_profiles.id
         `);
     // Map function to add shift_time to each profile
-    const profilesWithShiftTime = allEmployeeProfiles.rows.map(profile => {
-      const shift = shift_data.find(shift => shift.id === profile.shift);
+    var profilesWithShiftTime = allEmployeeProfiles.rows.map(profile => {
+      var shift = shift_data.find(shift => shift.id === profile.shift);
       return {
         ...profile,
         shift_name: shift ? shift.schedule_time : null
       };
     });
+
+    var filterQuery = req.query;
+    // search added
+    if (Object.keys(filterQuery).length !== 0) {
+      if (filterQuery.searchString) {
+        profilesWithShiftTime = profilesWithShiftTime.filter((item) =>
+          item.employee_id
+            .toLowerCase()
+            .includes(filterQuery.searchString?.toLowerCase()) ||
+          item.name
+            .toLowerCase()
+            .includes(filterQuery.searchString?.toLowerCase()) ||
+          item.phone_no
+            .toLowerCase()
+            .includes(filterQuery.searchString?.toLowerCase()) ||
+          item.sub_team_name
+            .toLowerCase()
+            .includes(filterQuery.searchString?.toLowerCase())
+        );
+      }
+      if (filterQuery.team_id) {
+        profilesWithShiftTime = profilesWithShiftTime.filter(
+          (item) => item.team_id == filterQuery.team_id
+        );
+      }
+      if (filterQuery.shift) {
+        profilesWithShiftTime = profilesWithShiftTime.filter(
+          (item) => item.shift == filterQuery.shift
+        );
+      }
+      if (filterQuery.employee_category) {
+        profilesWithShiftTime = profilesWithShiftTime.filter(
+          (item) => item.employee_category == filterQuery.employee_category
+        );
+      }
+    }
 
     return res.status(RestAPI.STATUSCODE.ok).send({
       statusCode: RestAPI.STATUSCODE.ok,

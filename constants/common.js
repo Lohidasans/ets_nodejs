@@ -91,6 +91,17 @@ const state_data = [
     state: "Karnataka",
   },
 ];
+
+const employee_category = [
+  {
+    id: "1",
+    category: "permanent"    
+  },
+  {
+    id: "2",
+    category: "temporary"
+  }
+]
 module.exports = {
   user_type_data,
   shift_data,
@@ -98,4 +109,5 @@ module.exports = {
   team_type_data,
   team_data,
   state_data,
+  employee_category
 };
