@@ -52,7 +52,7 @@ const getSubTeamById = async (req, res) => {
     return res.status(RestAPI.STATUSCODE.ok).send({
       statusCode: RestAPI.STATUSCODE.ok,
       message: enMessage.listed_success,
-      data: isTeamExist.rows[0],
+      data: isTeamExist.rows,
     });
   } catch (err) {
     console.log("Error :", err);
