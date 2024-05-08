@@ -7,6 +7,10 @@ router.post(
     guestService.createGuest,
 );
 router.get(
+    "/api/getGuestCompany",
+    guestService.getGuestCompany,
+);
+router.get(
     "/api/getAllGuests",
     guestService.getAllGuest,
 );

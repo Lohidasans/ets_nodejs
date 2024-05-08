@@ -26,6 +26,37 @@ const createGuest = async (req, res) => {
   }
 };
 
+const getGuestCompany = async (req, res) => {
+  try {
+    var companyDetails = await db.query(`SELECT DISTINCT company FROM guests`);
+    var companyname = companyDetails.rows;
+
+    var filterQuery = req.query;
+    // search added
+    if (Object.keys(filterQuery).length !== 0) {
+      if (filterQuery.company) {
+        companyname = companyname.filter(
+          (item) => item.company == filterQuery.company
+        );
+      }
+    }
+
+    return res.status(RestAPI.STATUSCODE.ok).send({
+      statusCode: RestAPI.STATUSCODE.ok,
+      message: enMessage.listed_success,
+      companyData: companyname,
+    });
+  }
+  catch (err) {
+    console.log("Error :", err);
+    return res.status(RestAPI.STATUSCODE.internalServerError).send({
+      statusCode: RestAPI.STATUSCODE.internalServerError,
+      message: enMessage.listed_failure,
+      error: err,
+    });
+  }
+};
+
 const getGuestById = async (req, res) => {
   try {
     const isGuestExist = await db.query(`SELECT * FROM guests WHERE id = $1`, [
@@ -63,7 +94,7 @@ const getAllGuest = async (req, res) => {
       return {
         ...item,
         sNo: index + 1,
-        guest_type_name: guestTypeName.guest_type,    
+        guest_type_name: guestTypeName.guest_type,
       };
     });
 
@@ -186,6 +217,7 @@ module.exports = {
   createGuest,
   getGuestById,
   getAllGuest,
+  getGuestCompany,
   replaceGuest,
   deleteGuest,
 };
