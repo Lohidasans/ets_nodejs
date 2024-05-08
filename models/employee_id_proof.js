@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class employee_id_proof extends Model {
     /**
@@ -13,14 +11,18 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  employee_id_proof.init({
-    employee_id: DataTypes.STRING,
-    proof_name: DataTypes.STRING,
-    proof_number: DataTypes.STRING,
-    id_proof_url: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'employee_id_proof',
-  });
+  employee_id_proof.init(
+    {
+      employee_id: DataTypes.STRING,
+      proof_name: DataTypes.STRING,
+      proof_number: DataTypes.STRING,
+      id_proof_url_front: DataTypes.STRING,
+      id_proof_url_back: DataTypes.STRING,
+    },
+    {
+      sequelize,
+      modelName: "employee_id_proof",
+    }
+  );
   return employee_id_proof;
 };

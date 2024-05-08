@@ -2,8 +2,9 @@ const createError = require("http-errors");
 const express = require("express");
 const path = require("path");
 var bodyParser = require("body-parser");
-const multer = require('multer');
-const cookieParser = require("cookie-parser");  
+const multer = require("multer");
+const cookieParser = require("cookie-parser");
+const morgan = require("morgan");
 
 //userRouters
 const userRouter = require("./routes/userServiceRoute/userRouters");
@@ -30,12 +31,8 @@ const securityRouter = require("./routes/securityServiceRoute/securityRouters");
 //commonServiceRoute
 const commonServiceRoute = require("./routes/commonServiceRoute/commonServiceRoute");
 
-//imageUploadRoute
-// const imageUploadRoute = require("./routes/imageUploadRoute/imageUploadRoute");
-
 const cors = require("cors");
 const db = require("./config/dbConfig");
-const { uploadImage } = require("./services/imageUploadService/imageUploadService");
 
 db.connect();
 
@@ -51,6 +48,19 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Middleware for parsing JSON and URL-encoded bodies
 app.use(express.urlencoded({ extended: true }));
+app.use(morgan("dev"));
+
+// Create multer object
+const imageUpload = multer({
+  storage: multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, "images/");
+    },
+    filename: function (req, file, cb) {
+      cb(null, new Date().valueOf() + "_" + file.originalname);
+    },
+  }),
+});
 
 //userRouters
 app.use("/", userRouter);
@@ -77,34 +87,23 @@ app.use("/", securityRouter);
 //Common
 app.use("/", commonServiceRoute);
 
-//imageUpload 
-// app.use('/api', imageUploadRoute); 
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, 'uploads')); // Save uploaded images to the 'uploads' directory
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + '_' + file.originalname); // Rename the uploaded file with a unique name
-  }
+// Image Upload Routes
+app.post("/api/upload", imageUpload.single("image"), (req, res) => {
+  console.log(req.file);
+  const imageUrl = `http://localhost:5000/api/image/${req.file.filename}`;
+  res.status(201).send({
+    statusCode: 201,
+    message: "Image Upload Successfully!",
+    data: { imageUrl: imageUrl, fileName: req.file.originalname },
+  });
 });
 
-const upload = multer({ storage: storage });
-
-// Serve uploaded images statically
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.post('/uploadImage', upload.single('image'), async (req, res) => {
-  try {
-      if (!req.file) {
-      return res.status(400).json({ message: 'No image uploaded' });
-    }
-    // Upload the image and get the URL
-    const imageUrl = await uploadImage(req.file);
-    res.status(200).json({ imageUrl });
-  } catch (error) {
-    console.error("Error uploading image:", error);
-    res.status(500).json({ message: 'Failed to upload image' });
-  }
+// Image Get Routes
+app.get("/api/image/:filename", (req, res) => {
+  const { filename } = req.params;
+  const dirname = path.resolve();
+  const fullFilepath = path.join(dirname, "images/" + filename);
+  return res.sendFile(fullFilepath);
 });
 
 // catch 404 and forward to error handler
@@ -117,7 +116,6 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
-
 
 app.use(function (req, res, next) {
   next(createError(404));
