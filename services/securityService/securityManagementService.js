@@ -4,6 +4,7 @@ const enMessage = require("../../constants/enMessage.json");
 const { user_type_data } = require("../../constants/common");
 const user = require("../../constants/enums");
 const RestAPI = require("../../constants/enums");
+const securityController = require("../../controllers/securityController/securityController")
 
 const createSecurityManagement = async (req, res) => {
     try {
@@ -74,9 +75,7 @@ const getSecurityManagementById = async (req, res) => {
 
 const getAllSecurityManagement = async (req, res) => {
     try {
-        var allSecurityManagements = await db.query(
-            `SELECT * FROM security_managements ORDER BY id`
-        );
+        var allSecurityManagements = await securityController.getEmployeeSecurityDetails();
         var allJobs = allSecurityManagements.rows;
 
         return res.status(RestAPI.STATUSCODE.ok).send({
