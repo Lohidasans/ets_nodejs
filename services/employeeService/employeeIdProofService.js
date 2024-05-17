@@ -7,20 +7,15 @@ const createEmployeeIdProof = async (req, res) => {
   try {
     const now = new Date().toISOString();
     const employeeIdProofData = req.body;
-    //Check Employee Exist
-    const isEmployeeExist = await db.query(
-      `SELECT * from employee_profiles where employee_id = $1`,
-      [employeeIdProofData.employee_id]
-    );
-    if (isEmployeeExist.rowCount == 0) {
-      return res.status(RestAPI.STATUSCODE.notFound).send({
-        statusCode: RestAPI.STATUSCODE.notFound,
-        message: en.employeeNotFound,
-      });
-    }
 
     const employeeIdProofQuery = await db.query(
-      `INSERT INTO employee_id_proofs (employee_id, proof_name, proof_number, id_proof_url_front,id_proof_url_back, created_at, updated_at) VALUES ('${employeeIdProofData.employee_id}','${employeeIdProofData.proof_name}','${employeeIdProofData.proof_number}','${employeeIdProofData.id_proof_url_front}', '${employeeIdProofData.id_proof_url_back}','${now}', '${now}') RETURNING *`
+      `INSERT INTO employee_id_proofs (employee_id, proof_name, proof_number, id_proof_url_front,id_proof_url_back, is_deleted,created_at, updated_at) VALUES ('${
+        employeeIdProofData.employee_id
+      }','${employeeIdProofData.proof_name}','${
+        employeeIdProofData.proof_number
+      }','${employeeIdProofData.id_proof_url_front}', '${
+        employeeIdProofData.id_proof_url_back
+      }',${false},'${now}', '${now}') RETURNING *`
     );
     return res.status(RestAPI.STATUSCODE.ok).send({
       statusCode: RestAPI.STATUSCODE.ok,
@@ -67,7 +62,7 @@ const getEmployeeIdProofById = async (req, res) => {
 const getAllEmployeeIdProof = async (req, res) => {
   try {
     var allEmployeeIdProofs = await db.query(
-      `SELECT * FROM employee_id_proofs ORDER BY id`
+      `SELECT * FROM employee_id_proofs WHERE is_deleted=${false} ORDER BY id`
     );
     var allIdProofs = allEmployeeIdProofs.rows;
     var filterQuery = req.query;
@@ -142,7 +137,12 @@ const deleteEmployeeIdProof = async (req, res) => {
         message: en.employeeIdProofNotFound,
       });
     }
-    await db.query(`DELETE FROM employee_id_proofs WHERE id=${req.params.id}`);
+    // await db.query(`DELETE FROM employee_id_proofs WHERE id=${req.params.id}`);
+    await db.query(
+      `UPDATE employee_id_proofs SET is_deleted=${true} WHERE id='${
+        req.params.id
+      }'`
+    );
     return res.status(RestAPI.STATUSCODE.noContent).send({
       statusCode: RestAPI.STATUSCODE.noContent,
       message: enMessage.employee_idProof_deletion_success,

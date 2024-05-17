@@ -9,7 +9,23 @@ const createEmployeeProfile = async (req, res) => {
     const now = new Date().toISOString();
     const employeeProfileData = req.body;
     const employeeProfileQuery = await db.query(
-      `INSERT INTO employee_profiles (name, date_of_birth, email_id, phone_no, state, city, address, pincode, thumb_image_url, image_url, team_id, sub_team_id, employee_category, employee_id, date_of_joining, shift, breakfast, lunch, dinner, created_at, updated_at) VALUES ('${employeeProfileData.name}','${employeeProfileData.date_of_birth}','${employeeProfileData.email_id}','${employeeProfileData.phone_no}','${employeeProfileData.state}','${employeeProfileData.city}','${employeeProfileData.address}','${employeeProfileData.pincode}','${employeeProfileData.thumb_image_url}','${employeeProfileData.image_url}','${employeeProfileData.team_id}','${employeeProfileData.sub_team_id}','${employeeProfileData.employee_category}','${employeeProfileData.employee_id}','${employeeProfileData.date_of_joining}','${employeeProfileData.shift}','${employeeProfileData.breakfast}','${employeeProfileData.lunch}','${employeeProfileData.dinner}', '${now}', '${now}') RETURNING *`
+      `INSERT INTO employee_profiles (name, date_of_birth, email_id, phone_no, state, city, address, pincode, thumb_image_url, image_url, team_id, sub_team_id, employee_category, employee_id, date_of_joining, shift, breakfast, lunch, dinner,is_deleted, created_at, updated_at) VALUES ('${
+        employeeProfileData.name
+      }','${employeeProfileData.date_of_birth}','${
+        employeeProfileData.email_id
+      }','${employeeProfileData.phone_no}','${employeeProfileData.state}','${
+        employeeProfileData.city
+      }','${employeeProfileData.address}','${employeeProfileData.pincode}','${
+        employeeProfileData.thumb_image_url
+      }','${employeeProfileData.image_url}','${employeeProfileData.team_id}','${
+        employeeProfileData.sub_team_id
+      }','${employeeProfileData.employee_category}','${
+        employeeProfileData.employee_id
+      }','${employeeProfileData.date_of_joining}','${
+        employeeProfileData.shift
+      }','${employeeProfileData.breakfast}','${employeeProfileData.lunch}','${
+        employeeProfileData.dinner
+      }', ${false},'${now}', '${now}') RETURNING *`
     );
     return res.status(RestAPI.STATUSCODE.ok).send({
       statusCode: RestAPI.STATUSCODE.ok,
@@ -67,13 +83,14 @@ const getAllEmployeeProfile = async (req, res) => {
             sub_teams.sub_team,
             employee_profiles.id
             ORDER BY employee_profiles.id
-        `);
+        `
+    );
     // Map function to add shift_time to each profile
-    var profilesWithShiftTime = allEmployeeProfiles.rows.map(profile => {
-      var shift = shift_data.find(shift => shift.id === profile.shift);
+    var profilesWithShiftTime = allEmployeeProfiles.rows.map((profile) => {
+      var shift = shift_data.find((shift) => shift.id === profile.shift);
       return {
         ...profile,
-        shift_name: shift ? shift.schedule_time : null
+        shift_name: shift ? shift.schedule_time : null,
       };
     });
 
@@ -81,19 +98,20 @@ const getAllEmployeeProfile = async (req, res) => {
     // search added
     if (Object.keys(filterQuery).length !== 0) {
       if (filterQuery.searchString) {
-        profilesWithShiftTime = profilesWithShiftTime.filter((item) =>
-          item.employee_id
-            .toLowerCase()
-            .includes(filterQuery.searchString?.toLowerCase()) ||
-          item.name
-            .toLowerCase()
-            .includes(filterQuery.searchString?.toLowerCase()) ||
-          item.phone_no
-            .toLowerCase()
-            .includes(filterQuery.searchString?.toLowerCase()) ||
-          item.sub_team_name
-            .toLowerCase()
-            .includes(filterQuery.searchString?.toLowerCase())
+        profilesWithShiftTime = profilesWithShiftTime.filter(
+          (item) =>
+            item.employee_id
+              .toLowerCase()
+              .includes(filterQuery.searchString?.toLowerCase()) ||
+            item.name
+              .toLowerCase()
+              .includes(filterQuery.searchString?.toLowerCase()) ||
+            item.phone_no
+              .toLowerCase()
+              .includes(filterQuery.searchString?.toLowerCase()) ||
+            item.sub_team_name
+              .toLowerCase()
+              .includes(filterQuery.searchString?.toLowerCase())
         );
       }
       if (filterQuery.team_id) {

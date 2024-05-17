@@ -7,7 +7,7 @@ const searchTextFields = require("../../utils/userFilter");
 const { encoder, decoder } = require("../../utils/encoder&decoder");
 const { STATUSCODE } = require("../../constants/enums");
 const enMessage = require("../../constants/enMessage.json");
-
+const { user_type_data } = require("../../constants/common");
 
 const createUser = async (req, res) => {
   try {
@@ -118,6 +118,7 @@ const getAllUsers = async (req, res) => {
       let users = await db.query(
         `SELECT *,(SELECT ARRAY(SELECT p.permission_id FROM user_access_permissions p WHERE p.user_id = users.id))AS permissions FROM users ORDER BY users.id`
       );
+
       for (var i = 0; i < users.rowCount; i++) {
         users.rows[i].password = await decoder(users.rows[i].password);
       }
@@ -129,8 +130,19 @@ const getAllUsers = async (req, res) => {
             .includes(filterQuery.searchString?.toLowerCase()) ||
           user.name
             .toLowerCase()
-            .includes(filterQuery.searchString?.toLowerCase()) 
+            .includes(filterQuery.searchString?.toLowerCase())
       );
+
+      users = users?.map((item, index) => {
+        let userTypeData = user_type_data.find(
+          (userTypeItem) => userTypeItem.id === item.user_type
+        );
+        return {
+          ...item,
+          sNo: index + 1,
+          role: userTypeData.user_type,
+        };
+      });
 
       return res.status(STATUSCODE.ok).send({
         statusCode: STATUSCODE.ok,
@@ -144,6 +156,7 @@ const getAllUsers = async (req, res) => {
     for (var i = 0; i < users.rowCount; i++) {
       users.rows[i].password = await decoder(users.rows[i].password);
     }
+    console.log(users.rows, " users.rows");
     return res.status(STATUSCODE.ok).send({
       statusCode: STATUSCODE.ok,
       message: enMessage.listed_success,
@@ -236,19 +249,19 @@ const replaceUser = async (req, res) => {
                              updated_at = '${now}'
                              WHERE id = ${req.params.id} RETURNING *`;
     const userResult = await db.query(updateQuery);
-    
-    await db.query(
-        `DELETE FROM user_access_permissions WHERE user_id = ${req.params.id}`
-      );
 
-      let permissionList = [];
-      for (let permission of UserRequest.permissions) {
-        const result = await db.query(
-          `INSERT INTO user_access_permissions (user_id,permission_id,created_at,updated_at) VALUES('${existUser.rows[0].id}','${permission}','${now}','${now}')  RETURNING permission_id`
-        );
-        permissionList.push(result.rows[0].permission_id);
-      }
-  
+    await db.query(
+      `DELETE FROM user_access_permissions WHERE user_id = ${req.params.id}`
+    );
+
+    let permissionList = [];
+    for (let permission of UserRequest.permissions) {
+      const result = await db.query(
+        `INSERT INTO user_access_permissions (user_id,permission_id,created_at,updated_at) VALUES('${existUser.rows[0].id}','${permission}','${now}','${now}')  RETURNING permission_id`
+      );
+      permissionList.push(result.rows[0].permission_id);
+    }
+
     return res.status(STATUSCODE.created).send({
       statusCode: STATUSCODE.ok,
       message: enMessage.user_updation_success,
@@ -269,7 +282,7 @@ const updateUser = async (req, res) => {
   try {
     const now = new Date().toISOString();
     let UserRequest = req.body;
-    
+
     const existUser = await db.query(`SELECT * FROM users WHERE id= $1;`, [
       req.params.id,
     ]);
@@ -294,11 +307,17 @@ const updateUser = async (req, res) => {
     const updateName =
       UserRequest.name == null ? existUser.rows[0].name : UserRequest.name;
     const updateUserName =
-      UserRequest.user_name == null ? existUser.rows[0].user_name : UserRequest.user_name;
+      UserRequest.user_name == null
+        ? existUser.rows[0].user_name
+        : UserRequest.user_name;
     let updatePassword =
-      UserRequest.password == null ? existUser.rows[0].password : UserRequest.password;
+      UserRequest.password == null
+        ? existUser.rows[0].password
+        : UserRequest.password;
     const updateUserType =
-      UserRequest.user_type == null ? existUser.rows[0].user_type : UserRequest.user_type;
+      UserRequest.user_type == null
+        ? existUser.rows[0].user_type
+        : UserRequest.user_type;
 
     if (updatePassword != existUser.rows[0].password) {
       updatePassword = await encoder(updatePassword);
@@ -312,18 +331,18 @@ const updateUser = async (req, res) => {
                              updated_at = '${now}'
                              WHERE id = ${req.params.id} RETURNING *`;
     const userResult = await db.query(updateQuery);
-    // update user_access_permissions 
-      await db.query(
-        `DELETE FROM user_access_permissions WHERE user_id = ${req.params.id}`
+    // update user_access_permissions
+    await db.query(
+      `DELETE FROM user_access_permissions WHERE user_id = ${req.params.id}`
+    );
+    let permissionList = [];
+    for (let permission of UserRequest.permissions) {
+      const result = await db.query(
+        `INSERT INTO user_access_permissions (user_id,permission_id,created_at,updated_at) VALUES('${existUser.rows[0].id}','${permission}','${now}','${now}')  RETURNING permission_id`
       );
-      let permissionList = [];
-      for (let permission of UserRequest.permissions) {
-        const result = await db.query(
-          `INSERT INTO user_access_permissions (user_id,permission_id,created_at,updated_at) VALUES('${existUser.rows[0].id}','${permission}','${now}','${now}')  RETURNING permission_id`
-        );
-        permissionList.push(result.rows[0].permission_id);
-      }
-    
+      permissionList.push(result.rows[0].permission_id);
+    }
+
     return res.status(STATUSCODE.created).send({
       statusCode: STATUSCODE.ok,
       message: enMessage.user_updation_success,
