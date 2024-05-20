@@ -40,7 +40,7 @@ const createSubTeam = async (req, res) => {
 const getSubTeamById = async (req, res) => {
   try {
     const isTeamExist = await db.query(
-      `SELECT * FROM sub_teams WHERE id = $1`,
+      `SELECT * FROM sub_teams WHERE team_type_id = $1`,
       [req.params.id]
     );
     if (isTeamExist.rowCount == 0) {
