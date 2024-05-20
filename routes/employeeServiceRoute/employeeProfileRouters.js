@@ -1,26 +1,26 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 const employeeProfileService = require("../../services/employeeService/employeeProfileService");
 
 router.post(
-    "/api/createEmployeeProfile",
-    employeeProfileService.createEmployeeProfile,
+  "/api/createEmployeeProfile",
+  employeeProfileService.createEmployeeProfile
 );
 router.get(
-    "/api/getAllEmployeeProfiles",
-    employeeProfileService.getAllEmployeeProfile,
+  "/api/getAllEmployeeProfiles",
+  employeeProfileService.getAllEmployeeProfile
 );
 router.get(
-    "/api/getEmployeeProfile/:id",
-    employeeProfileService.getEmployeeProfileById
+  "/api/getEmployeeProfile/:id",
+  employeeProfileService.getEmployeeProfileById
 );
 router.put(
-    "/api/replaceEmployeeProfile/:id",
-    employeeProfileService.replaceEmployeeProfile,
+  "/api/replaceEmployeeProfile/:id",
+  employeeProfileService.replaceEmployeeProfile
 );
 router.delete(
-    "/api/deleteEmployeeProfile/:id",
-    employeeProfileService.deleteEmployeeProfile,
+  "/api/deleteEmployeeProfile/:id",
+  employeeProfileService.deleteEmployeeProfile
 );
 
 module.exports = router;

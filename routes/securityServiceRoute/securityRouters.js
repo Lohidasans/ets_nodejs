@@ -1,30 +1,30 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 const securityService = require("../../services/securityService/securityManagementService");
 
 router.post(
-    "/api/createSecurityManagement",
-    securityService.createSecurityManagement,
+  "/api/createSecurityManagement",
+  securityService.createSecurityManagement
 );
 router.get(
-    "/api/getAllSecurityManagements",
-    securityService.getAllSecurityManagement,
+  "/api/getAllSecurityManagements",
+  securityService.getAllSecurityManagement
 );
 router.get(
-    "/api/getSecurityManagement/:id",
-    securityService.getSecurityManagementById
+  "/api/getSecurityManagement/:id",
+  securityService.getSecurityManagementById
 );
 router.put(
-    "/api/replaceSecurityManagement/:id",
-    securityService.replaceSecurityManagement,
+  "/api/replaceSecurityManagement/:id",
+  securityService.replaceSecurityManagement
 );
 router.patch(
-    "/api/updateSecurityManagement/:id",
-    securityService.updateSecurityManagement,
+  "/api/updateSecurityManagement/:id",
+  securityService.updateSecurityManagement
 );
 router.delete(
-    "/api/deleteSecurityManagement/:id",
-    securityService.deleteSecurityManagement,
+  "/api/deleteSecurityManagement/:id",
+  securityService.deleteSecurityManagement
 );
 
 module.exports = router;

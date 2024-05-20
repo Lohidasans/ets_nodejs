@@ -1,7 +1,7 @@
 const createError = require("http-errors");
 const express = require("express");
 const path = require("path");
-var bodyParser = require("body-parser");
+const bodyParser = require("body-parser");
 const multer = require("multer");
 const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
@@ -42,7 +42,6 @@ app.use(cors());
 
 app.use(express.json());
 app.use(bodyParser.json());
-//app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -123,7 +122,6 @@ app.use(function (req, res, next) {
 
 app.listen({ port: 5000 }, async () => {
   console.log("Server is listen on http://localhost:5000");
-  // await sequelize.authenticate();
   console.log("Database Connected");
 });
 
