@@ -39,14 +39,13 @@ db.connect();
 const app = express();
 
 app.use(cors());
-
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 // Middleware for parsing JSON and URL-encoded bodies
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 app.use(morgan("dev"));
 
 // Create multer object

@@ -24,6 +24,9 @@ router.get(
   ],
   userService.getAllUsers
 );
+
+router.get("/api/getAllAdminUsers", userService.getAllUsers);
+
 router.get(
   "/api/getUserById/:id",
   [

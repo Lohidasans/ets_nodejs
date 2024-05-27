@@ -7,17 +7,15 @@ module.exports = function (req, res, next) {
   try {
     const token = req.headers["authorization"];
     if (!token)
-      return res
-        .status(STATUSCODE.unauthorized)
-        .send({
-          statusCode: STATUSCODE.unauthorized,
-          message: en.accessDenied,
-        });
+      return res.status(STATUSCODE.unauthorized).send({
+        statusCode: STATUSCODE.unauthorized,
+        message: en.accessDenied,
+      });
 
     const splitedbearer = token.split(" ");
     const bearerToken = splitedbearer[1];
     const decoded = jwt.verify(bearerToken, `${jwt_private_key}`);
-    let decodedToken = decoded;
+    decodedToken = decoded;
     next();
   } catch (ex) {
     res

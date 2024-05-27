@@ -37,7 +37,11 @@ const createUser = async (req, res) => {
     const hashPassword = await encoder(newUser.password);
 
     const user = await db.query(
-      `INSERT INTO users (name,user_name,password,user_type,created_at,updated_at) VALUES('${newUser.name}','${newUser.user_name}','${hashPassword}','${newUser.user_type}','${now}','${now}') RETURNING *`
+      `INSERT INTO users (name,user_name,password,user_type,is_deleted,created_at,updated_at) VALUES('${
+        newUser.name
+      }','${newUser.user_name}','${hashPassword}','${
+        newUser.user_type
+      }',${false},'${now}','${now}') RETURNING *`
     );
     let permissionList = [];
     for (let permission of newUser.permissions) {
@@ -116,9 +120,8 @@ const getAllUsers = async (req, res) => {
     var filterQuery = req.query;
     if (Object.keys(filterQuery).length != 0) {
       let users = await db.query(
-        `SELECT *,(SELECT ARRAY(SELECT p.permission_id FROM user_access_permissions p WHERE p.user_id = users.id))AS permissions FROM users ORDER BY users.id`
+        `SELECT *,(SELECT ARRAY(SELECT p.permission_id FROM user_access_permissions p WHERE p.user_id = users.id))AS permissions FROM users  ORDER BY users.id`
       );
-
       for (var i = 0; i < users.rowCount; i++) {
         users.rows[i].password = await decoder(users.rows[i].password);
       }
@@ -171,7 +174,6 @@ const getAllUsers = async (req, res) => {
     });
   }
 };
-
 const getUserById = async (req, res) => {
   try {
     const users = await db.query(
