@@ -3,23 +3,23 @@ const router = express.Router();
 const userAccessPermissionService = require("../../services/userService/userAccessPermissionService");
 
 router.post(
-  "/api/createUserAccessPermission",
+  "/api/v1/createUserAccessPermission",
   userAccessPermissionService.createUserAccessPermission
 );
 router.get(
-  "/api/getAllUserAccessPermissions/:user_id",
+  "/api/v1/getAllUserAccessPermissions/:user_id",
   userAccessPermissionService.getAllUserAccessPermissions
 );
 router.get(
-  "/api/getUserAccessPermission/:id",
+  "/api/v1/getUserAccessPermission/:id",
   userAccessPermissionService.getUserAccessPermissionById
 );
 router.put(
-  "/api/replaceUserAccessPermission/:id",
+  "/api/v1/replaceUserAccessPermission/:id",
   userAccessPermissionService.replaceUserAccessPermission
 );
 router.delete(
-  "/api/deleteUserAccessPermission/:id",
+  "/api/v1/deleteUserAccessPermission/:id",
   userAccessPermissionService.deleteUserAccessPermission
 );
 

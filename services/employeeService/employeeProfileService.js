@@ -3,6 +3,7 @@ const en = require("../../constants/en.json");
 const enMessage = require("../../constants/enMessage.json");
 const RestAPI = require("../../constants/enums");
 const { shift_data } = require("../../constants/common");
+const { findOne } = require("../../query/common");
 
 const createEmployeeProfile = async (req, res) => {
   try {
@@ -44,10 +45,8 @@ const createEmployeeProfile = async (req, res) => {
 
 const getEmployeeProfileById = async (req, res) => {
   try {
-    const isEmployeeProfileExist = await db.query(
-      `SELECT * FROM employee_profiles WHERE id = $1`,
-      [req.params.id]
-    );
+    const query = findOne("employee_profiles", "id", req.params.id);
+    const isEmployeeProfileExist = await db.query(query);
     if (isEmployeeProfileExist.rowCount == 0) {
       return res.status(RestAPI.STATUSCODE.notFound).send({
         statusCode: RestAPI.STATUSCODE.notFound,
@@ -150,10 +149,8 @@ const replaceEmployeeProfile = async (req, res) => {
   try {
     const now = new Date().toISOString();
     const employeeProfileData = req.body;
-    const isEmployeeProfileExist = await db.query(
-      `SELECT * FROM employee_profiles WHERE id = $1`,
-      [req.params.id]
-    );
+    const query = findOne("employee_profiles", "id", req.params.id);
+    const isEmployeeProfileExist = await db.query(query);
     if (isEmployeeProfileExist.rowCount == 0) {
       return res.status(RestAPI.STATUSCODE.notFound).send({
         statusCode: RestAPI.STATUSCODE.notFound,
@@ -163,10 +160,7 @@ const replaceEmployeeProfile = async (req, res) => {
     const updateQuery = `UPDATE employee_profiles SET name='${employeeProfileData.name}', date_of_birth='${employeeProfileData.date_of_birth}', email_id='${employeeProfileData.email_id}', phone_no='${employeeProfileData.phone_no}', state='${employeeProfileData.state}', city='${employeeProfileData.city}', address='${employeeProfileData.address}', pincode='${employeeProfileData.pincode}', thumb_image_url='${employeeProfileData.thumb_image_url}', image_url='${employeeProfileData.image_url}', team_id='${employeeProfileData.team_id}', sub_team_id='${employeeProfileData.sub_team_id}', employee_category='${employeeProfileData.employee_category}', date_of_joining='${employeeProfileData.date_of_joining}', shift='${employeeProfileData.shift}',breakfast ='${employeeProfileData.breakfast}', lunch ='${employeeProfileData.lunch}', dinner='${employeeProfileData.dinner}', updated_at = '${now}' WHERE id='${req.params.id}'`;
 
     await db.query(updateQuery);
-    const updatedData = await db.query(
-      `SELECT * FROM employee_profiles WHERE id=$1`,
-      [req.params.id]
-    );
+    const updatedData = await db.query(query);
     return res.status(RestAPI.STATUSCODE.ok).send({
       statusCode: RestAPI.STATUSCODE.ok,
       message: enMessage.employee_profile_updation_success,
@@ -184,10 +178,8 @@ const replaceEmployeeProfile = async (req, res) => {
 
 const deleteEmployeeProfile = async (req, res) => {
   try {
-    const isEmployeeProfileExist = await db.query(
-      `SELECT * FROM employee_profiles WHERE id = $1`,
-      [req.params.id]
-    );
+    const query = findOne("employee_profiles", "id", req.params.id);
+    const isEmployeeProfileExist = await db.query(query);
     if (isEmployeeProfileExist.rowCount == 0) {
       return res.status(RestAPI.STATUSCODE.notFound).send({
         statusCode: RestAPI.STATUSCODE.notFound,

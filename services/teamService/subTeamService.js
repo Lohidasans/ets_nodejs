@@ -3,15 +3,15 @@ const { team_type_data, team_data } = require("../../constants/common");
 const en = require("../../constants/en.json");
 const enMessage = require("../../constants/enMessage.json");
 const RestAPI = require("../../constants/enums");
+const { findOne } = require("../../query/common");
 
 const createSubTeam = async (req, res) => {
   try {
     const now = new Date().toISOString();
     const subTeamData = req.body;
     //To check team exists
-    const isTeamExist = await db.query(`SELECT * FROM teams WHERE id = $1`, [
-      subTeamData.team_id,
-    ]);
+    const query = findOne("teams", "id", subTeamData.team_id);
+    const isTeamExist = await db.query(query);
     if (isTeamExist.rowCount == 0) {
       return res.status(RestAPI.STATUSCODE.notFound).send({
         statusCode: RestAPI.STATUSCODE.notFound,
@@ -39,10 +39,8 @@ const createSubTeam = async (req, res) => {
 
 const getSubTeamById = async (req, res) => {
   try {
-    const isTeamExist = await db.query(
-      `SELECT * FROM sub_teams WHERE team_type_id = $1`,
-      [req.params.id]
-    );
+    const query = findOne("sub_teams", "id", req.params.id);
+    const isTeamExist = await db.query(query);
     if (isTeamExist.rowCount == 0) {
       return res.status(RestAPI.STATUSCODE.notFound).send({
         statusCode: RestAPI.STATUSCODE.notFound,
@@ -171,10 +169,8 @@ const replaceSubTeam = async (req, res) => {
   try {
     const now = new Date().toISOString();
     const teamData = req.body;
-    const isTeamExist = await db.query(
-      `SELECT * FROM sub_teams WHERE id = $1`,
-      [req.params.id]
-    );
+    const query = findOne("sub_teams", "id", req.params.id);
+    const isTeamExist = await db.query(query);
     if (isTeamExist.rowCount == 0) {
       return res.status(RestAPI.STATUSCODE.notFound).send({
         statusCode: RestAPI.STATUSCODE.notFound,
@@ -183,9 +179,7 @@ const replaceSubTeam = async (req, res) => {
     }
     const updateQuery = `UPDATE sub_teams SET team_id='${teamData.team_id}', sub_team='${teamData.sub_team}',leader_id ='${teamData.leader_id}', team_type_id='${teamData.team_type_id}', updated_at = '${now}' WHERE id='${req.params.id}'`;
     await db.query(updateQuery);
-    const updatedData = await db.query(`SELECT * FROM sub_teams WHERE id=$1`, [
-      req.params.id,
-    ]);
+    const updatedData = await db.query(query);
     return res.status(RestAPI.STATUSCODE.ok).send({
       statusCode: RestAPI.STATUSCODE.ok,
       message: enMessage.subTeam_updation_success,
@@ -203,10 +197,8 @@ const replaceSubTeam = async (req, res) => {
 
 const deleteSubTeam = async (req, res) => {
   try {
-    const isTeamExist = await db.query(
-      `SELECT * FROM sub_teams WHERE id = $1`,
-      [req.params.id]
-    );
+    const query = findOne("sub_teams", "id", req.params.id);
+    const isTeamExist = await db.query(query);
     if (isTeamExist.rowCount == 0) {
       return res.status(RestAPI.STATUSCODE.notFound).send({
         statusCode: RestAPI.STATUSCODE.notFound,

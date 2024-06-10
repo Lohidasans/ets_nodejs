@@ -3,27 +3,27 @@ const router = express.Router();
 const securityService = require("../../services/securityService/securityManagementService");
 
 router.post(
-  "/api/createSecurityManagement",
+  "/api/v1/createSecurityManagement",
   securityService.createSecurityManagement
 );
 router.get(
-  "/api/getAllSecurityManagements",
+  "/api/v1/getAllSecurityManagements",
   securityService.getAllSecurityManagement
 );
 router.get(
-  "/api/getSecurityManagement/:id",
+  "/api/v1/getSecurityManagement/:id",
   securityService.getSecurityManagementById
 );
 router.put(
-  "/api/replaceSecurityManagement/:id",
+  "/api/v1/replaceSecurityManagement/:id",
   securityService.replaceSecurityManagement
 );
 router.patch(
-  "/api/updateSecurityManagement/:id",
+  "/api/v1/updateSecurityManagement/:id",
   securityService.updateSecurityManagement
 );
 router.delete(
-  "/api/deleteSecurityManagement/:id",
+  "/api/v1/deleteSecurityManagement/:id",
   securityService.deleteSecurityManagement
 );
 
