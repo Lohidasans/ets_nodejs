@@ -6,7 +6,7 @@ const userService = require("../../services/userService/userService");
 const { PERMISSIONS } = require("../../constants/enums");
 
 router.post(
-  "/api/createUser",
+  "/api/v1/createUser",
   [
     auth,
     checkAuth.permission.id.bind({ permissionId: PERMISSIONS.userManagements }),
@@ -14,9 +14,9 @@ router.post(
   ],
   userService.createUser
 );
-router.post("/api/loginUser", userService.loginUser);
+router.post("/api/v1/loginUser", userService.loginUser);
 router.get(
-  "/api/getAllUsers",
+  "/api/v1/getAllUsers",
   [
     auth,
     checkAuth.permission.id.bind({ permissionId: PERMISSIONS.userManagements }),
@@ -25,10 +25,10 @@ router.get(
   userService.getAllUsers
 );
 
-router.get("/api/getAllAdminUsers", userService.getAllUsers);
+router.get("/api/v1/getAllAdminUsers", userService.getAllUsers);
 
 router.get(
-  "/api/getUserById/:id",
+  "/api/v1/getUserById/:id",
   [
     auth,
     checkAuth.permission.id.bind({ permissionId: PERMISSIONS.userManagements }),
@@ -36,9 +36,9 @@ router.get(
   ],
   userService.getUserById
 );
-router.get("/api/getUsersById/:id", userService.getUserById);
+router.get("/api/v1/getUsersById/:id", userService.getUserById);
 router.put(
-  "/api/replaceUser/:id",
+  "/api/v1/replaceUser/:id",
   [
     auth,
     checkAuth.permission.id.bind({ permissionId: PERMISSIONS.userManagements }),
@@ -47,7 +47,7 @@ router.put(
   userService.replaceUser
 );
 router.patch(
-  "/api/updateUser/:id",
+  "/api/v1/updateUser/:id",
   [
     auth,
     checkAuth.permission.id.bind({ permissionId: PERMISSIONS.userManagements }),
@@ -56,7 +56,7 @@ router.patch(
   userService.updateUser
 );
 router.delete(
-  "/api/deleteUser/:id",
+  "/api/v1/deleteUser/:id",
   [
     auth,
     checkAuth.permission.id.bind({ permissionId: PERMISSIONS.userManagements }),

@@ -3,23 +3,23 @@ const router = express.Router();
 const employeeOrnamentService = require("../../services/employeeService/employeeOrnamentService");
 
 router.post(
-  "/api/createEmployeeOrnamentDetails",
+  "/api/v1/createEmployeeOrnamentDetails",
   employeeOrnamentService.createEmployeeOrnamentDetails
 );
 router.get(
-  "/api/getAllEmployeeOrnamentDetails",
+  "/api/v1/getAllEmployeeOrnamentDetails",
   employeeOrnamentService.getAllEmployeeOrnamentDetails
 );
 router.get(
-  "/api/getEmployeeOrnamentDetails/:id",
+  "/api/v1/getEmployeeOrnamentDetails/:id",
   employeeOrnamentService.getEmployeeOrnamentDetailsById
 );
 router.put(
-  "/api/replaceEmployeeOrnamentDetails/:id",
+  "/api/v1/replaceEmployeeOrnamentDetails/:id",
   employeeOrnamentService.replaceEmployeeOrnamentDetails
 );
 router.delete(
-  "/api/deleteEmployeeOrnamentDetails/:id",
+  "/api/v1/deleteEmployeeOrnamentDetails/:id",
   employeeOrnamentService.deleteEmployeeOrnamentDetails
 );
 

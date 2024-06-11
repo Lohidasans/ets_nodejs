@@ -3,23 +3,23 @@ const router = express.Router();
 const employeeProfileService = require("../../services/employeeService/employeeProfileService");
 
 router.post(
-  "/api/createEmployeeProfile",
+  "/api/v1/createEmployeeProfile",
   employeeProfileService.createEmployeeProfile
 );
 router.get(
-  "/api/getAllEmployeeProfiles",
+  "/api/v1/getAllEmployeeProfiles",
   employeeProfileService.getAllEmployeeProfile
 );
 router.get(
-  "/api/getEmployeeProfile/:id",
+  "/api/v1/getEmployeeProfile/:id",
   employeeProfileService.getEmployeeProfileById
 );
 router.put(
-  "/api/replaceEmployeeProfile/:id",
+  "/api/v1/replaceEmployeeProfile/:id",
   employeeProfileService.replaceEmployeeProfile
 );
 router.delete(
-  "/api/deleteEmployeeProfile/:id",
+  "/api/v1/deleteEmployeeProfile/:id",
   employeeProfileService.deleteEmployeeProfile
 );
 
