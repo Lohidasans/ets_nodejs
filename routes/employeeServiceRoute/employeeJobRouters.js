@@ -2,15 +2,15 @@ const express = require("express");
 const router = express.Router();
 const employeeJobService = require("../../services/employeeService/employeeJobService");
 
-router.post("/api/v1/createEmployeeJob", employeeJobService.createEmployeeJob);
-router.get("/api/v1/getAllEmployeeJobs", employeeJobService.getAllEmployeeJob);
-router.get("/api/v1/getEmployeeJob/:id", employeeJobService.getEmployeeJobById);
+router.post("/api/createEmployeeJob", employeeJobService.createEmployeeJob);
+router.get("/api/getAllEmployeeJobs", employeeJobService.getAllEmployeeJob);
+router.get("/api/getEmployeeJob/:id", employeeJobService.getEmployeeJobById);
 router.put(
-  "/api/v1/replaceEmployeeJob/:id",
+  "/api/replaceEmployeeJob/:id",
   employeeJobService.replaceEmployeeJob
 );
 router.delete(
-  "/api/v1/deleteEmployeeJob/:id",
+  "/api/deleteEmployeeJob/:id",
   employeeJobService.deleteEmployeeJob
 );
 

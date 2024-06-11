@@ -3,23 +3,23 @@ const router = express.Router();
 const employeeIdProofService = require("../../services/employeeService/employeeIdProofService");
 
 router.post(
-  "/api/v1/createEmployeeIdProof",
+  "/api/createEmployeeIdProof",
   employeeIdProofService.createEmployeeIdProof
 );
 router.get(
-  "/api/v1/getAllEmployeeIdProofs",
+  "/api/getAllEmployeeIdProofs",
   employeeIdProofService.getAllEmployeeIdProof
 );
 router.get(
-  "/api/v1/getEmployeeIdProof/:id",
+  "/api/getEmployeeIdProof/:id",
   employeeIdProofService.getEmployeeIdProofById
 );
 router.put(
-  "/api/v1/replaceEmployeeIdProof/:id",
+  "/api/replaceEmployeeIdProof/:id",
   employeeIdProofService.replaceEmployeeIdProof
 );
 router.delete(
-  "/api/v1/deleteEmployeeIdProof/:id",
+  "/api/deleteEmployeeIdProof/:id",
   employeeIdProofService.deleteEmployeeIdProof
 );
 

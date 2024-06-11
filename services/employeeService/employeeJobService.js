@@ -2,7 +2,6 @@ const db = require("../../config/dbConfig");
 const en = require("../../constants/en.json");
 const enMessage = require("../../constants/enMessage.json");
 const RestAPI = require("../../constants/enums");
-const { findOne, findAll } = require("../../query/common");
 
 const createEmployeeJob = async (req, res) => {
   try {
@@ -34,8 +33,10 @@ const createEmployeeJob = async (req, res) => {
 
 const getEmployeeJobById = async (req, res) => {
   try {
-    const query = findOne("employee_jobs", "id", req.params.id);
-    const isEmployeeJobExist = await db.query(query);
+    const isEmployeeJobExist = await db.query(
+      `SELECT * FROM employee_jobs WHERE id = $1`,
+      [req.params.id]
+    );
     if (isEmployeeJobExist.rowCount == 0) {
       return res.status(RestAPI.STATUSCODE.notFound).send({
         statusCode: RestAPI.STATUSCODE.notFound,
@@ -59,10 +60,9 @@ const getEmployeeJobById = async (req, res) => {
 
 const getAllEmployeeJob = async (req, res) => {
   try {
-    const query = findAll("employee_jobs", "id", "ASC", {
-      is_deleted: false,
-    });
-    var allEmployeeJobs = await db.query(query);
+    var allEmployeeJobs = await db.query(
+      `SELECT * FROM employee_jobs WHERE is_deleted=${false}  ORDER BY id`
+    );
     var allJobs = allEmployeeJobs.rows;
     var filterQuery = req.query;
     // filter by employee_id
@@ -92,8 +92,10 @@ const replaceEmployeeJob = async (req, res) => {
   try {
     const now = new Date().toISOString();
     const employeeJobData = req.body;
-    const query = findOne("employee_jobs", "id", req.params.id);
-    const isEmployeeJobExist = await db.query(query);
+    const isEmployeeJobExist = await db.query(
+      `SELECT * FROM employee_jobs WHERE id = $1`,
+      [req.params.id]
+    );
     if (isEmployeeJobExist.rowCount == 0) {
       return res.status(RestAPI.STATUSCODE.notFound).send({
         statusCode: RestAPI.STATUSCODE.notFound,
@@ -103,7 +105,10 @@ const replaceEmployeeJob = async (req, res) => {
     const updateQuery = `UPDATE employee_jobs SET employee_id='${employeeJobData.employee_id}', organization='${employeeJobData.organization}', from_date='${employeeJobData.from_date}', to_date='${employeeJobData.to_date}', description='${employeeJobData.description}', certificate_url='${employeeJobData.certificate_url}', updated_at = '${now}' WHERE id='${req.params.id}'`;
 
     await db.query(updateQuery);
-    const updatedData = await db.query(query);
+    const updatedData = await db.query(
+      `SELECT * FROM employee_jobs WHERE id=$1`,
+      [req.params.id]
+    );
     return res.status(RestAPI.STATUSCODE.ok).send({
       statusCode: RestAPI.STATUSCODE.ok,
       message: enMessage.employee_job_updation_success,
@@ -121,8 +126,10 @@ const replaceEmployeeJob = async (req, res) => {
 
 const deleteEmployeeJob = async (req, res) => {
   try {
-    const query = findOne("employee_jobs", "id", req.params.id);
-    const isEmployeeJobExist = await db.query(query);
+    const isEmployeeJobExist = await db.query(
+      `SELECT * FROM employee_jobs WHERE id = $1`,
+      [req.params.id]
+    );
     if (isEmployeeJobExist.rowCount == 0) {
       return res.status(RestAPI.STATUSCODE.notFound).send({
         statusCode: RestAPI.STATUSCODE.notFound,

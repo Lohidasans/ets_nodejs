@@ -3,7 +3,6 @@ const { guest_type_data } = require("../../constants/common");
 const en = require("../../constants/en.json");
 const enMessage = require("../../constants/enMessage.json");
 const RestAPI = require("../../constants/enums");
-const { findOne, findAll } = require("../../query/common");
 
 const createGuest = async (req, res) => {
   try {
@@ -47,7 +46,8 @@ const getGuestCompany = async (req, res) => {
       message: enMessage.listed_success,
       companyData: companyname,
     });
-  } catch (err) {
+  }
+  catch (err) {
     console.log("Error :", err);
     return res.status(RestAPI.STATUSCODE.internalServerError).send({
       statusCode: RestAPI.STATUSCODE.internalServerError,
@@ -59,8 +59,9 @@ const getGuestCompany = async (req, res) => {
 
 const getGuestById = async (req, res) => {
   try {
-    const query = findOne("guests", "id", req.params.id);
-    const isGuestExist = await db.query(query);
+    const isGuestExist = await db.query(`SELECT * FROM guests WHERE id = $1`, [
+      req.params.id,
+    ]);
     if (isGuestExist.rowCount == 0) {
       return res.status(RestAPI.STATUSCODE.notFound).send({
         statusCode: RestAPI.STATUSCODE.notFound,
@@ -84,8 +85,7 @@ const getGuestById = async (req, res) => {
 
 const getAllGuest = async (req, res) => {
   try {
-    const query = findAll("guests", "id", "ASC");
-    var allGuests = await db.query(query);
+    var allGuests = await db.query(`SELECT * FROM guests ORDER BY id`);
     var allGuestData = allGuests.rows;
     allGuestData = allGuestData?.map((item, index) => {
       let guestTypeName = guest_type_data?.find(
@@ -157,8 +157,9 @@ const replaceGuest = async (req, res) => {
   try {
     const now = new Date().toISOString();
     const guestData = req.body;
-    const query = findOne("guests", "id", req.params.id);
-    const isGuestExist = await db.query(query);
+    const isGuestExist = await db.query(`SELECT * FROM guests WHERE id = $1`, [
+      req.params.id,
+    ]);
     if (isGuestExist.rowCount == 0) {
       return res.status(RestAPI.STATUSCODE.notFound).send({
         statusCode: RestAPI.STATUSCODE.notFound,
@@ -168,7 +169,9 @@ const replaceGuest = async (req, res) => {
     const updateQuery = `UPDATE guests SET name='${guestData.name}', phone_no = '${guestData.phone_no}', guest_id ='${guestData.guest_id}', email_id='${guestData.email_id}', type = '${guestData.type}', company = '${guestData.company}', description = '${guestData.description}', updated_at = '${now}' WHERE id='${req.params.id}'`;
 
     await db.query(updateQuery);
-    const updatedData = await db.query(query);
+    const updatedData = await db.query(`SELECT * FROM guests WHERE id=$1`, [
+      req.params.id,
+    ]);
     return res.status(RestAPI.STATUSCODE.ok).send({
       statusCode: RestAPI.STATUSCODE.ok,
       message: enMessage.guest_updation_success,
@@ -186,8 +189,9 @@ const replaceGuest = async (req, res) => {
 
 const deleteGuest = async (req, res) => {
   try {
-    const query = findOne("guests", "id", req.params.id);
-    const isGuestExist = await db.query(query);
+    const isGuestExist = await db.query(`SELECT * FROM guests WHERE id = $1`, [
+      req.params.id,
+    ]);
     if (isGuestExist.rowCount == 0) {
       return res.status(RestAPI.STATUSCODE.notFound).send({
         statusCode: RestAPI.STATUSCODE.notFound,

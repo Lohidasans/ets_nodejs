@@ -2,7 +2,6 @@ const db = require("../../config/dbConfig");
 const en = require("../../constants/en.json");
 const enMessage = require("../../constants/enMessage.json");
 const RestAPI = require("../../constants/enums");
-const { findOne, findAll } = require("../../query/common");
 
 const createEmployeeIdProof = async (req, res) => {
   try {
@@ -35,8 +34,10 @@ const createEmployeeIdProof = async (req, res) => {
 
 const getEmployeeIdProofById = async (req, res) => {
   try {
-    const query = findOne("employee_id_proofs", "id", req.params.id);
-    const isEmployeeIdProofExist = await db.query(query);
+    const isEmployeeIdProofExist = await db.query(
+      `SELECT * FROM employee_id_proofs WHERE id = $1`,
+      [req.params.id]
+    );
     if (isEmployeeIdProofExist.rowCount == 0) {
       return res.status(RestAPI.STATUSCODE.notFound).send({
         statusCode: RestAPI.STATUSCODE.notFound,
@@ -60,10 +61,9 @@ const getEmployeeIdProofById = async (req, res) => {
 
 const getAllEmployeeIdProof = async (req, res) => {
   try {
-    const query = findAll("employee_id_proofs", "id", "ASC", {
-      is_deleted: false,
-    });
-    var allEmployeeIdProofs = await db.query(query);
+    var allEmployeeIdProofs = await db.query(
+      `SELECT * FROM employee_id_proofs WHERE is_deleted=${false} ORDER BY id`
+    );
     var allIdProofs = allEmployeeIdProofs.rows;
     var filterQuery = req.query;
     // filter by employee_id
@@ -93,9 +93,10 @@ const replaceEmployeeIdProof = async (req, res) => {
   try {
     const now = new Date().toISOString();
     const employeeIdProofData = req.body;
-    const query = findOne("employee_id_proofs", "id", req.params.id);
-
-    const isEmployeeIdProofExist = await db.query(query);
+    const isEmployeeIdProofExist = await db.query(
+      `SELECT * FROM employee_id_proofs WHERE id = $1`,
+      [req.params.id]
+    );
     if (isEmployeeIdProofExist.rowCount == 0) {
       return res.status(RestAPI.STATUSCODE.notFound).send({
         statusCode: RestAPI.STATUSCODE.notFound,
@@ -126,8 +127,10 @@ const replaceEmployeeIdProof = async (req, res) => {
 
 const deleteEmployeeIdProof = async (req, res) => {
   try {
-    const query = findOne("employee_id_proofs", "id", req.params.id);
-    const isEmployeeIdProofExist = await db.query(query);
+    const isEmployeeIdProofExist = await db.query(
+      `SELECT * FROM employee_id_proofs WHERE id = $1`,
+      [req.params.id]
+    );
     if (isEmployeeIdProofExist.rowCount == 0) {
       return res.status(RestAPI.STATUSCODE.notFound).send({
         statusCode: RestAPI.STATUSCODE.notFound,

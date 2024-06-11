@@ -3,23 +3,23 @@ const router = express.Router();
 const employeeMobileService = require("../../services/employeeService/employeeMobileService");
 
 router.post(
-  "/api/v1/createEmployeeMobileDetails",
+  "/api/createEmployeeMobileDetails",
   employeeMobileService.createEmployeeMobileDetails
 );
 router.get(
-  "/api/v1/getAllEmployeeMobileDetails",
+  "/api/getAllEmployeeMobileDetails",
   employeeMobileService.getAllEmployeeMobileDetails
 );
 router.get(
-  "/api/v1/getEmployeeMobileDetails/:id",
+  "/api/getEmployeeMobileDetails/:id",
   employeeMobileService.getEmployeeMobileDetailsById
 );
 router.put(
-  "/api/v1/replaceEmployeeMobileDetails/:id",
+  "/api/replaceEmployeeMobileDetails/:id",
   employeeMobileService.replaceEmployeeMobileDetails
 );
 router.delete(
-  "/api/v1/deleteEmployeeMobileDetails/:id",
+  "/api/deleteEmployeeMobileDetails/:id",
   employeeMobileService.deleteEmployeeMobileDetails
 );
 

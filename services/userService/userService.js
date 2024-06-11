@@ -8,7 +8,6 @@ const { encoder, decoder } = require("../../utils/encoder&decoder");
 const { STATUSCODE } = require("../../constants/enums");
 const enMessage = require("../../constants/enMessage.json");
 const { user_type_data } = require("../../constants/common");
-const { findOne } = require("../../query/common");
 
 const createUser = async (req, res) => {
   try {
@@ -26,8 +25,10 @@ const createUser = async (req, res) => {
         error: error.details[0].message,
       });
 
-    const query = findOne("users", "user_name", newUser.user_name);
-    const existUser = await db.query(query);
+    const existUser = await db.query(
+      `SELECT * FROM users WHERE user_name=$1;`,
+      [newUser.user_name]
+    );
     if (existUser.rowCount != 0) {
       return res
         .status(STATUSCODE.badRequest)
@@ -69,8 +70,10 @@ const createUser = async (req, res) => {
 const loginUser = async (req, res) => {
   const user = req.body;
   try {
-    const query = findOne("users", "user_name", user.user_name);
-    const existUser = await db.query(query);
+    const existUser = await db.query(
+      `SELECT * FROM users WHERE user_name =  $1;`,
+      [user.user_name]
+    );
     if (existUser.rowCount == 0)
       return res
         .status(STATUSCODE.notFound)
@@ -215,10 +218,10 @@ const replaceUser = async (req, res) => {
         statusCode: STATUSCODE.badRequest,
         error: error.details[0].message,
       });
-    const query = findOne("users", "id", req.params.id);
-
     //Check user already exist in the table
-    const existUser = await db.query(query);
+    const existUser = await db.query(`SELECT * FROM users WHERE id= $1;`, [
+      req.params.id,
+    ]);
     if (existUser.rowCount == 0)
       return res
         .status(STATUSCODE.notFound)
@@ -226,8 +229,10 @@ const replaceUser = async (req, res) => {
 
     //Check user_name already exist condn
     if (existUser.rows[0].user_name != UserRequest.user_name) {
-      const query = findOne("users", "user_name", UserRequest.user_name);
-      const userName = await db.query(query);
+      const userName = await db.query(
+        `SELECT * FROM users WHERE user_name= $1;`,
+        [UserRequest.user_name]
+      );
       if (userName.rowCount != 0) {
         return res
           .status(STATUSCODE.badRequest)
@@ -279,8 +284,10 @@ const updateUser = async (req, res) => {
   try {
     const now = new Date().toISOString();
     let UserRequest = req.body;
-    const query = findOne("users", "id", req.params.id);
-    const existUser = await db.query(query);
+
+    const existUser = await db.query(`SELECT * FROM users WHERE id= $1;`, [
+      req.params.id,
+    ]);
 
     if (existUser.rowCount == 0)
       return res
@@ -288,8 +295,10 @@ const updateUser = async (req, res) => {
         .send({ statusCode: STATUSCODE.notFound, message: en.userNotFound });
 
     if (existUser.rows[0].user_name != UserRequest.user_name) {
-      const query = findOne("users", "user_name", UserRequest.user_name);
-      const userName = await db.query(query);
+      const userName = await db.query(
+        `SELECT * FROM users WHERE user_name = $1;`,
+        [UserRequest.user_name]
+      );
       if (userName.rowCount != 0) {
         return res
           .status(STATUSCODE.badRequest)
@@ -354,8 +363,9 @@ const updateUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   try {
-    const query = findOne("users", "id", req.params.id);
-    const existUser = await db.query(query);
+    const existUser = await db.query(`SELECT * FROM users WHERE id= $1;`, [
+      req.params.id,
+    ]);
     if (existUser.rowCount == 0) {
       return res
         .status(STATUSCODE.notFound)

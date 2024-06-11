@@ -2,7 +2,6 @@ const db = require("../../config/dbConfig");
 const en = require("../../constants/en.json");
 const enMessage = require("../../constants/enMessage.json");
 const RestAPI = require("../../constants/enums");
-const { findOne, findAll } = require("../../query/common");
 
 const createEmployeeOrnamentDetails = async (req, res) => {
   try {
@@ -34,8 +33,10 @@ const createEmployeeOrnamentDetails = async (req, res) => {
 
 const getEmployeeOrnamentDetailsById = async (req, res) => {
   try {
-    const query = findOne("employee_ornaments", "id", req.params.id);
-    const isEmployeeOrnamentDetailsExist = await db.query(query);
+    const isEmployeeOrnamentDetailsExist = await db.query(
+      `SELECT * FROM employee_ornaments WHERE id = $1`,
+      [req.params.id]
+    );
     if (isEmployeeOrnamentDetailsExist.rowCount == 0) {
       return res.status(RestAPI.STATUSCODE.notFound).send({
         statusCode: RestAPI.STATUSCODE.notFound,
@@ -59,10 +60,9 @@ const getEmployeeOrnamentDetailsById = async (req, res) => {
 
 const getAllEmployeeOrnamentDetails = async (req, res) => {
   try {
-    const query = findAll("employee_ornaments", "id", "ASC", {
-      is_deleted: false,
-    });
-    var allEmployeeOrnamentDetails = await db.query(query);
+    var allEmployeeOrnamentDetails = await db.query(
+      `SELECT * FROM employee_ornaments WHERE is_deleted=${false} ORDER BY id`
+    );
     var allOrnamentDetails = allEmployeeOrnamentDetails.rows;
     var filterQuery = req.query;
     // filter by employee_id
@@ -92,8 +92,10 @@ const replaceEmployeeOrnamentDetails = async (req, res) => {
   try {
     const now = new Date().toISOString();
     const employeeOrnamentDetailsData = req.body;
-    const query = findOne("employee_ornaments", "id", req.params.id);
-    const isEmployeeOrnamentDetailsExist = await db.query(query);
+    const isEmployeeOrnamentDetailsExist = await db.query(
+      `SELECT * FROM employee_ornaments WHERE id = $1`,
+      [req.params.id]
+    );
     if (isEmployeeOrnamentDetailsExist.rowCount == 0) {
       return res.status(RestAPI.STATUSCODE.notFound).send({
         statusCode: RestAPI.STATUSCODE.notFound,
@@ -103,8 +105,10 @@ const replaceEmployeeOrnamentDetails = async (req, res) => {
     const updateQuery = `UPDATE employee_ornaments SET employee_id='${employeeOrnamentDetailsData.employee_id}', ornament_name='${employeeOrnamentDetailsData.ornament_name}', ornament_weight='${employeeOrnamentDetailsData.ornament_weight}', ornament_image_url='${employeeOrnamentDetailsData.ornament_image_url}', ornament_description='${employeeOrnamentDetailsData.ornament_description}', updated_at = '${now}' WHERE id='${req.params.id}'`;
 
     await db.query(updateQuery);
-
-    const updatedData = await db.query(query);
+    const updatedData = await db.query(
+      `SELECT * FROM employee_ornaments WHERE id=$1`,
+      [req.params.id]
+    );
     return res.status(RestAPI.STATUSCODE.ok).send({
       statusCode: RestAPI.STATUSCODE.ok,
       message: enMessage.employee_ornament_updation_success,
@@ -122,8 +126,10 @@ const replaceEmployeeOrnamentDetails = async (req, res) => {
 
 const deleteEmployeeOrnamentDetails = async (req, res) => {
   try {
-    const query = findOne("employee_ornaments", "id", req.params.id);
-    const isEmployeeOrnamentDetailsExist = await db.query(query);
+    const isEmployeeOrnamentDetailsExist = await db.query(
+      `SELECT * FROM employee_ornaments WHERE id = $1`,
+      [req.params.id]
+    );
     if (isEmployeeOrnamentDetailsExist.rowCount == 0) {
       return res.status(RestAPI.STATUSCODE.notFound).send({
         statusCode: RestAPI.STATUSCODE.notFound,

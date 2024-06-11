@@ -2,7 +2,6 @@ const db = require("../../config/dbConfig");
 const en = require("../../constants/en.json");
 const enMessage = require("../../constants/enMessage.json");
 const RestAPI = require("../../constants/enums");
-const { findOne, findAll } = require("../../query/common");
 
 const createEmployeeMobileDetails = async (req, res) => {
   try {
@@ -36,8 +35,10 @@ const createEmployeeMobileDetails = async (req, res) => {
 
 const getEmployeeMobileDetailsById = async (req, res) => {
   try {
-    const query = findOne("employee_mobiles", "id", req.params.id);
-    const isEmployeeMobileDetailsExist = await db.query(query);
+    const isEmployeeMobileDetailsExist = await db.query(
+      `SELECT * FROM employee_mobiles WHERE id = $1`,
+      [req.params.id]
+    );
     if (isEmployeeMobileDetailsExist.rowCount == 0) {
       return res.status(RestAPI.STATUSCODE.notFound).send({
         statusCode: RestAPI.STATUSCODE.notFound,
@@ -61,10 +62,9 @@ const getEmployeeMobileDetailsById = async (req, res) => {
 
 const getAllEmployeeMobileDetails = async (req, res) => {
   try {
-    const query = findAll("employee_mobiles", "id", "ASC", {
-      is_deleted: false,
-    });
-    var allEmployeeMobileDetails = await db.query(query);
+    var allEmployeeMobileDetails = await db.query(
+      `SELECT * FROM employee_mobiles WHERE is_deleted=${false} ORDER BY id`
+    );
     var allMobileDetails = allEmployeeMobileDetails.rows;
     var filterQuery = req.query;
     // filter by employee_id
@@ -94,8 +94,10 @@ const replaceEmployeeMobileDetails = async (req, res) => {
   try {
     const now = new Date().toISOString();
     const employeeMobileDetailsData = req.body;
-    const query = findOne("employee_mobiles", "id", req.params.id);
-    const isEmployeeMobileDetailsExist = await db.query(query);
+    const isEmployeeMobileDetailsExist = await db.query(
+      `SELECT * FROM employee_mobiles WHERE id = $1`,
+      [req.params.id]
+    );
     if (isEmployeeMobileDetailsExist.rowCount == 0) {
       return res.status(RestAPI.STATUSCODE.notFound).send({
         statusCode: RestAPI.STATUSCODE.notFound,
@@ -105,7 +107,10 @@ const replaceEmployeeMobileDetails = async (req, res) => {
     const updateQuery = `UPDATE employee_mobiles SET employee_id='${employeeMobileDetailsData.employee_id}', mobile_name='${employeeMobileDetailsData.mobile_name}', mobile_weight='${employeeMobileDetailsData.mobile_weight}', mobile_front_image_url='${employeeMobileDetailsData.mobile_front_image_url}', mobile_back_image_url='${employeeMobileDetailsData.mobile_back_image_url}', mobile_description='${employeeMobileDetailsData.mobile_description}', updated_at = '${now}' WHERE id='${req.params.id}'`;
 
     await db.query(updateQuery);
-    const updatedData = await db.query(query);
+    const updatedData = await db.query(
+      `SELECT * FROM employee_mobiles WHERE id=$1`,
+      [req.params.id]
+    );
     return res.status(RestAPI.STATUSCODE.ok).send({
       statusCode: RestAPI.STATUSCODE.ok,
       message: enMessage.employee_mobileDetail_updation_success,
@@ -123,8 +128,10 @@ const replaceEmployeeMobileDetails = async (req, res) => {
 
 const deleteEmployeeMobileDetails = async (req, res) => {
   try {
-    const query = findOne("employee_mobiles", "id", req.params.id);
-    const isEmployeeMobileDetailsExist = await db.query(query);
+    const isEmployeeMobileDetailsExist = await db.query(
+      `SELECT * FROM employee_mobiles WHERE id = $1`,
+      [req.params.id]
+    );
     if (isEmployeeMobileDetailsExist.rowCount == 0) {
       return res.status(RestAPI.STATUSCODE.notFound).send({
         statusCode: RestAPI.STATUSCODE.notFound,
