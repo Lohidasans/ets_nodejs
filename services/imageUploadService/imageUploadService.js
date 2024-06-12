@@ -1,26 +1,20 @@
-const fs = require('fs');
-const path = require('path');
+const path = require("path");
 
-const uploadImage = async (image) => {
-    try
-    {
-        console.log("Image object:", image);
-
-        const filename = Date.now() + '_' + image.originalname;
-        const imagePath = path.join(__dirname, './uploads', filename); //path where the image will be saved
-        console.log("ImagePath", imagePath);
-        console.log("Buffer", image.buffer);
-        //const data = Buffer.from(image.buffer)
-        fs.writeFileSync(imagePath, image.buffer); // Write the image data to the file system
-        return `/uploads/${filename}`; 
-    }
-    catch (error)
-    {
-        console.error("Error uploading image:", error);
-        throw new Error('Failed to upload image');
-    }
+const uploadImage = (req, res) => {
+  console.log(req.file);
+  const imageUrl = `http://localhost:5000/api/v1/image/${req.file.filename}`;
+  res.status(201).send({
+    statusCode: 201,
+    message: "Image Upload Successfully!",
+    data: { imageUrl: imageUrl, fileName: req.file.originalname },
+  });
 };
 
-module.exports = {
-    uploadImage
+const getImage = (req, res) => {
+  const { filename } = req.params;
+  const dirname = path.resolve();
+  const fullFilepath = path.join(dirname, "images/" + filename);
+  return res.sendFile(fullFilepath);
 };
+
+module.exports = { uploadImage, getImage };

@@ -2,9 +2,7 @@ const createError = require("http-errors");
 const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
-const multer = require("multer");
 const cookieParser = require("cookie-parser");
-const morgan = require("morgan");
 
 //userRouters
 const userRouter = require("./routes/userServiceRoute/userRouters");
@@ -31,6 +29,9 @@ const securityRouter = require("./routes/securityServiceRoute/securityRouters");
 //commonServiceRoute
 const commonServiceRoute = require("./routes/commonServiceRoute/commonServiceRoute");
 
+//Image Upload Route
+const ImageUploadRoute = require("./routes/imageUploadRoute/imageUploadRoute");
+
 const cors = require("cors");
 const db = require("./config/dbConfig");
 
@@ -46,19 +47,6 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Middleware for parsing JSON and URL-encoded bodies
 app.use(express.urlencoded({ extended: false }));
-app.use(morgan("dev"));
-
-// Create multer object
-const imageUpload = multer({
-  storage: multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, "images/");
-    },
-    filename: function (req, file, cb) {
-      cb(null, new Date().valueOf() + "_" + file.originalname);
-    },
-  }),
-});
 
 //userRouters
 app.use("/", userRouter);
@@ -84,32 +72,13 @@ app.use("/", securityRouter);
 
 //Common
 app.use("/", commonServiceRoute);
-
-// Image Upload Routes
-app.post("/api/upload", imageUpload.single("image"), (req, res) => {
-  console.log(req.file);
-  const imageUrl = `http://localhost:5000/api/image/${req.file.filename}`;
-  res.status(201).send({
-    statusCode: 201,
-    message: "Image Upload Successfully!",
-    data: { imageUrl: imageUrl, fileName: req.file.originalname },
-  });
-});
-
-// Image Get Routes
-app.get("/api/image/:filename", (req, res) => {
-  const { filename } = req.params;
-  const dirname = path.resolve();
-  const fullFilepath = path.join(dirname, "images/" + filename);
-  return res.sendFile(fullFilepath);
-});
+app.use("/", ImageUploadRoute);
 
 // catch 404 and forward to error handler
 app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
-
   // render the error page
   res.status(err.status || 500);
   res.render("error");
