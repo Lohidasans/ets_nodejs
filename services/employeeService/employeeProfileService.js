@@ -28,6 +28,8 @@ const createEmployeeProfile = async (req, res) => {
         employeeProfileData.dinner
       }', ${false},'${now}', '${now}') RETURNING *`
     );
+
+    const employeBiometricQuery = await db.query(`INSERT INTO user_details(employee_id, employee_name, last_updated_time) VALUES ('${employeeProfileData.employee_id}', '${employeeProfileData.name}', ${0}`);
     return res.status(RestAPI.STATUSCODE.ok).send({
       statusCode: RestAPI.STATUSCODE.ok,
       message: enMessage.employee_profile_creation_success,

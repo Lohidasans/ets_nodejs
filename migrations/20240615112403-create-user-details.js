@@ -10,8 +10,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       last_updated_time: {
-        allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.INTEGER
       }
     });
   },
