@@ -168,7 +168,7 @@ const replaceGuest = async (req, res) => {
     const updateQuery = `UPDATE guests SET name='${guestData.name}', phone_no = '${guestData.phone_no}', guest_id ='${guestData.guest_id}', email_id='${guestData.email_id}', type = '${guestData.type}', company = '${guestData.company}', description = '${guestData.description}', updated_at = '${now}' WHERE id='${req.params.id}'`;
 
     await db.query(updateQuery);
-    const updatedData = await db.query(query);
+    const updatedData = await query;
     return res.status(RestAPI.STATUSCODE.ok).send({
       statusCode: RestAPI.STATUSCODE.ok,
       message: enMessage.guest_updation_success,
