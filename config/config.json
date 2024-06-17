@@ -1,23 +1,23 @@
 {
   "development": {
     "username": "postgres",
-    "password": "dustMan",
+    "password": "ets@1234",
     "database": "EmployeeTrackingsys",
-    "host": "3.111.37.8",
+    "host": "35.154.73.169",
     "dialect": "postgres"
   },
   "test": {
     "username": "postgres",
-    "password": "dustMan",
+    "password": "ets@1234",
     "database": "EmployeeTrackingsys",
-    "host": "3.111.37.8",
+    "host": "35.154.73.169",
     "dialect": "postgres"
   },
   "production": {
     "username": "postgres",
-    "password": "dustMan",
+    "password": "ets@1234",
     "database": "EmployeeTrackingsys",
-    "host": "3.111.37.8",
+    "host": "35.154.73.169",
     "dialect": "postgres"
   }
 }

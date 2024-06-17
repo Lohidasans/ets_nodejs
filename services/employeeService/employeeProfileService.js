@@ -29,7 +29,12 @@ const createEmployeeProfile = async (req, res) => {
       }', ${false},'${now}', '${now}') RETURNING *`
     );
 
-    const employeBiometricQuery = await db.query(`INSERT INTO user_details(employee_id, employee_name, last_updated_time) VALUES ('${employeeProfileData.employee_id}', '${employeeProfileData.name}', ${0}`);
+    const employeeBiometricQuery = await db.query(
+      `INSERT INTO user_details(employee_id, employee_name, last_updated_time) VALUES ('${
+        employeeProfileData.employee_id
+      }', '${employeeProfileData.name}', ${0}) RETURNING *`
+    );
+    console.log(employeeBiometricQuery);
     return res.status(RestAPI.STATUSCODE.ok).send({
       statusCode: RestAPI.STATUSCODE.ok,
       message: enMessage.employee_profile_creation_success,
@@ -159,7 +164,29 @@ const replaceEmployeeProfile = async (req, res) => {
         message: en.employeeProfileNotFound,
       });
     }
-    const updateQuery = `UPDATE employee_profiles SET name='${employeeProfileData.name}', date_of_birth='${employeeProfileData.date_of_birth}', email_id='${employeeProfileData.email_id}', phone_no='${employeeProfileData.phone_no}', state='${employeeProfileData.state}', city='${employeeProfileData.city}', address='${employeeProfileData.address}', pincode='${employeeProfileData.pincode}', thumb_image_url='${employeeProfileData.thumb_image_url}', image_url='${employeeProfileData.image_url}', team_id='${employeeProfileData.team_id}', sub_team_id='${employeeProfileData.sub_team_id}', employee_category='${employeeProfileData.employee_category}', date_of_joining='${employeeProfileData.date_of_joining}', shift='${employeeProfileData.shift}',breakfast ='${employeeProfileData.breakfast}', lunch ='${employeeProfileData.lunch}', dinner='${employeeProfileData.dinner}', updated_at = '${now}' WHERE id='${req.params.id}'`;
+    const updateQuery = `UPDATE employee_profiles SET name='${
+      employeeProfileData.name
+    }', date_of_birth='${employeeProfileData.date_of_birth}', email_id='${
+      employeeProfileData.email_id
+    }', phone_no='${employeeProfileData.phone_no}', state='${
+      employeeProfileData.state
+    }', city='${employeeProfileData.city}', address='${
+      employeeProfileData.address
+    }', pincode='${employeeProfileData.pincode}', thumb_image_url='${
+      employeeProfileData.thumb_image_url
+    }', image_url='${employeeProfileData.image_url}', team_id='${
+      employeeProfileData.team_id
+    }', sub_team_id='${employeeProfileData.sub_team_id}', employee_category='${
+      employeeProfileData.employee_category
+    }', date_of_joining='${employeeProfileData.date_of_joining}', shift='${
+      employeeProfileData.shift
+    }',breakfast ='${employeeProfileData.breakfast}', lunch ='${
+      employeeProfileData.lunch
+    }', dinner='${
+      employeeProfileData.dinner
+    }',is_deleted='${false}', updated_at = '${now}' WHERE id='${
+      req.params.id
+    }'`;
 
     await db.query(updateQuery);
     const updatedData = await db.query(query);

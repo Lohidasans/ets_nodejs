@@ -135,12 +135,12 @@ const getAllUsers = async (req, res) => {
 
       users = users?.map((item, index) => {
         let userTypeData = user_type_data.find(
-          (userTypeItem) => userTypeItem.id === item.user_type
+          (userTypeItem) => userTypeItem.id === Number(item.user_type)
         );
         return {
           ...item,
           sNo: index + 1,
-          role: userTypeData.user_type,
+          role: userTypeData?.user_type,
         };
       });
 
