@@ -4,6 +4,7 @@ const enMessage = require("../../constants/enMessage.json");
 const RestAPI = require("../../constants/enums");
 const { shift_data } = require("../../constants/common");
 const { findOne } = require("../../query/common");
+const { matrixApi, matrixDeviceApi } = require("../../utils/commonApi");
 
 const createEmployeeProfile = async (req, res) => {
   try {
@@ -34,6 +35,8 @@ const createEmployeeProfile = async (req, res) => {
         employeeProfileData.employee_id
       }', '${employeeProfileData.name}', ${0}) RETURNING *`
     );
+    const url = `user?action=set;id=${employeeProfileData.employee_id};enable-fr=1;name=${employeeProfileData.name}`;
+    matrixApi(url);
     console.log(employeeBiometricQuery);
     return res.status(RestAPI.STATUSCODE.ok).send({
       statusCode: RestAPI.STATUSCODE.ok,
@@ -85,6 +88,7 @@ const getAllEmployeeProfile = async (req, res) => {
             FROM employee_profiles
             INNER JOIN teams ON employee_profiles.team_id = teams.id
             INNER JOIN sub_teams ON employee_profiles.team_id = sub_teams.id
+            WHERE employee_profiles.is_deleted = ${false}
             GROUP BY teams.team_name,
             sub_teams.sub_team,
             employee_profiles.id
@@ -189,7 +193,9 @@ const replaceEmployeeProfile = async (req, res) => {
     }'`;
 
     await db.query(updateQuery);
-    const updatedData = await db.query(query);
+    const updatedData = await query;
+    const url = `user?action=set;id=${employeeProfileData.employee_id};name=${employeeProfileData.name}`;
+    matrixApi(url);
     return res.status(RestAPI.STATUSCODE.ok).send({
       statusCode: RestAPI.STATUSCODE.ok,
       message: enMessage.employee_profile_updation_success,
@@ -215,7 +221,18 @@ const deleteEmployeeProfile = async (req, res) => {
         message: en.employeeProfileNotFound,
       });
     }
-    await db.query(`DELETE FROM employee_profiles WHERE id=${req.params.id}`);
+    console.log(
+      isEmployeeProfileExist.rows[0].employee_id,
+      "isEmployeeProfileExist"
+    );
+    // await db.query(`DELETE FROM employee_profiles WHERE id=${req.params.id}`);
+    await db.query(
+      `UPDATE employee_profiles SET is_deleted=${true} WHERE id=${
+        req.params.id
+      } `
+    );
+    const url = `user?action=delete;id=${isEmployeeProfileExist.rows[0].employee_id}`;
+    matrixApi(url);
     return res.status(RestAPI.STATUSCODE.noContent).send({
       statusCode: RestAPI.STATUSCODE.noContent,
       message: enMessage.employee_profile_deletion_success,
@@ -230,10 +247,107 @@ const deleteEmployeeProfile = async (req, res) => {
   }
 };
 
+const listDevices = async (req, res) => {
+  const url = "device?action=get";
+  try {
+    const response = await matrixApi(url);
+
+    if (response.statusCode === 200) {
+      let devices = response.data;
+      devices = devices.filter(
+        (device) => device.id !== "<EOT>" && device.id !== ""
+      );
+      return res.status(RestAPI.STATUSCODE.ok).send({
+        statusCode: RestAPI.STATUSCODE.ok,
+        data: devices,
+      });
+    } else {
+      console.error("Error response:", response.error);
+      return res.status(response.statusCode).send({
+        statusCode: response.statusCode,
+        error: response.error,
+      });
+    }
+  } catch (error) {
+    console.error("Error making request:", error);
+    return res.status(RestAPI.STATUSCODE.internalServerError).send({
+      statusCode: RestAPI.STATUSCODE.internalServerError,
+      error: error.message,
+    });
+  }
+};
+
+const deviceAssign = async (req, res) => {
+  try {
+    const { employee_id, device } = req.body;
+    const url = `device?action=assign;id=${employee_id};device=${device}`;
+    const response = await matrixApi(url);
+    console.log(response, "response");
+    if (response.statusCode === 200) {
+      return res.status(response.statusCode).send({
+        statusCode: response.statusCode,
+        message: "Successfully Assigned!",
+      });
+    }
+  } catch (error) {
+    console.error("Error making request:", error);
+    return res.status(RestAPI.STATUSCODE.internalServerError).send({
+      statusCode: RestAPI.STATUSCODE.internalServerError,
+      error: error.message,
+    });
+  }
+};
+
+const enrollUser = async (req, res) => {
+  try {
+    const { employee_id, device_type, device_id, enroll_type, enroll_count } =
+      req.body;
+    const url = `user?action=enroll;id=${employee_id};device-type=${device_type};device-id=${device_id};enroll-type=${enroll_type};enroll-count=${enroll_count}`;
+    const response = await matrixApi(url);
+    console.log(response, "response");
+    if (response.statusCode === 200) {
+      return res.status(response.statusCode).send({
+        statusCode: response.statusCode,
+        message: "Successfully Enrolled!",
+      });
+    }
+  } catch (error) {
+    console.error("Error making request:", error);
+    return res.status(RestAPI.STATUSCODE.internalServerError).send({
+      statusCode: RestAPI.STATUSCODE.internalServerError,
+      error: error.message,
+    });
+  }
+};
+const frEnrol = async (req, res) => {
+  try {
+    const { employee_id } = req.body;
+    const url = `action=enroll&user-id=${employee_id}&type=7&face-count=5`;
+    const response = await matrixDeviceApi(url);
+    console.log(response, "response");
+    if (response.statusCode === 200) {
+      return res.status(response.statusCode).send({
+        statusCode: response.statusCode,
+        message: "Successfully Assigned!",
+      });
+    }
+  } catch (error) {
+    console.error("Error making request:", error);
+    return res.status(RestAPI.STATUSCODE.internalServerError).send({
+      statusCode: RestAPI.STATUSCODE.internalServerError,
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   createEmployeeProfile,
   getEmployeeProfileById,
   getAllEmployeeProfile,
   replaceEmployeeProfile,
   deleteEmployeeProfile,
+  listDevices,
+  deviceAssign,
+  enrollUser,
+  frEnrol,
 };

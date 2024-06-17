@@ -12,6 +12,12 @@ const createGuest = async (req, res) => {
     const guestQuery = await db.query(
       `INSERT INTO guests (name, phone_no, type, guest_id, email_id, company, description,created_at, updated_at) VALUES ('${guestData.name}','${guestData.phone_no}',${guestData.type}, '${guestData.guest_id}','${guestData.email_id}','${guestData.company}','${guestData.description}','${now}', '${now}') RETURNING *`
     );
+    const guestBiometricQuery = await db.query(
+      `INSERT INTO user_details(employee_id, employee_name, last_updated_time) VALUES ('${
+        guestData.guest_id
+      }', '${guestData.name}', ${0}) RETURNING *`
+    );
+    console.log(guestBiometricQuery);
     return res.status(RestAPI.STATUSCODE.ok).send({
       statusCode: RestAPI.STATUSCODE.ok,
       message: enMessage.guest_creation_success,
