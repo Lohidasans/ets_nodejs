@@ -65,48 +65,25 @@ const getSubTeamById = async (req, res) => {
 const getAllSubTeam = async (req, res) => {
   try {
     const queryString = `
-            SELECT
-            sub_teams.*,
-            teams.team_name AS team_name,
-            COUNT(sub_teams.team_id) AS no_of_members
-            FROM sub_teams 
-            INNER JOIN teams ON sub_teams.team_id = teams.id
-            GROUP BY teams.team_name,
-            sub_teams.id
-            ORDER BY sub_teams.id
-        `;
-    // const queryString = `
-    //     SELECT
-    //         teams.team_name AS team_name,
-    //         COUNT(sub_teams.team_id) AS no_of_members
-    //     FROM
-    //         sub_teams
-    //     JOIN
-    //         teams ON sub_teams.team_id = teams.id
-    //     GROUP BY
-    //         teams.team_name
-    //     ORDER BY
-    //         teams.team_name`;
-
-    // {
-    //     "statusCode": 200,
-    //         "message": "Data Retrieved Successfully",
-    //             "category": [
-    //                 {
-    //                     "team_name": "Admin",
-    //                     "no_of_members": "1"
-    //                 },
-    //                 {
-    //                     "team_name": "Polishing",
-    //                     "no_of_members": "3"
-    //                 },
-    //                 {
-    //                     "team_name": "Workshop",
-    //                     "no_of_members": "1"
-    //                 }
-    //             ]
-    // }
-
+           SELECT
+          t.team_name AS team_name,
+            s.sub_team,
+            s.team_type_id,
+            s.leader_id,
+            COUNT(ep.sub_team_id) AS no_of_members
+        FROM
+            sub_teams AS s
+            INNER JOIN teams AS t ON s.team_id = t.id
+            INNER JOIN employee_profiles AS ep ON s.team_id = ep.team_id
+        GROUP BY
+                t.team_name,
+                s.sub_team,
+                s.team_type_id,
+                s.leader_id,
+                s.id
+            ORDER BY
+                s.id `;
+    
     const result = await db.query(queryString);
     let allTeams = result.rows;
 
