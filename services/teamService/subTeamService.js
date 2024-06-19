@@ -70,6 +70,7 @@ const getAllSubTeam = async (req, res) => {
             s.sub_team,
             s.team_type_id,
             s.leader_id,
+            s.id,
             COUNT(ep.sub_team_id) AS no_of_members
         FROM
             sub_teams AS s
@@ -83,7 +84,6 @@ const getAllSubTeam = async (req, res) => {
                 s.id
             ORDER BY
                 s.id `;
-    
     const result = await db.query(queryString);
     let allTeams = result.rows;
 
