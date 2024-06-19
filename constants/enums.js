@@ -10,8 +10,8 @@ const PERMISSIONS = {
 
 const SECURITYSTATUS = {
   notYetChecked: 0,
-  allowInside: 1,
-  allowOutside: 2,
+  allowed: 1,
+  notAllowed: 2,
 }
 
 const GATEOPTIONSTATUS = {

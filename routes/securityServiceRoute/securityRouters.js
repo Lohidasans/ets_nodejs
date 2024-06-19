@@ -26,5 +26,9 @@ router.delete(
   "/api/v1/deleteSecurityManagement/:id",
   securityService.deleteSecurityManagement
 );
+router.get(
+  "/api/v1/getEmployeeTrackingDetails",
+  securityService.getEmployeeTracking
+);
 
 module.exports = router;

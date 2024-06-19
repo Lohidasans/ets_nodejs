@@ -15,7 +15,16 @@ module.exports = {
       security_id: {
         type: Sequelize.INTEGER
       },
-      status: {
+      is_allowed: {
+        type: Sequelize.BOOLEAN
+      },
+      date: {
+        type: Sequelize.DATE
+      },
+      time: {
+        type: Sequelize.TIME
+      },
+      device_id: {
         type: Sequelize.INTEGER
       },
       created_at: {

@@ -6,11 +6,20 @@ const user = require("../../constants/enums");
 const RestAPI = require("../../constants/enums");
 const securityController = require("../../controllers/securityController/securityController");
 const { findOne } = require("../../query/common");
+const moment = require("moment");
 
 const createSecurityManagement = async (req, res) => {
   try {
     const now = new Date().toISOString();
     const securityData = req.body;
+    const date = securityData.date.split('T')[0]; // Extracts the date part
+    const time = securityData.time.split(' ')[0];
+
+    console.log("DATE" , date);
+    console.log("Time" , time);
+
+
+    
     const findByEmployee = findOne(
       "employee_profiles",
       "employee_id",
@@ -41,7 +50,7 @@ const createSecurityManagement = async (req, res) => {
     }
 
     const securityQuery = await db.query(
-      `INSERT INTO security_managements (employee_id,security_id, status, created_at, updated_at) VALUES ('${securityData.employee_id}','${securityData.security_id}','${securityData.status}', '${now}', '${now}') RETURNING *`
+      `INSERT INTO security_managements (employee_id,security_id, is_allowed, date, time, device_id, created_at, updated_at) VALUES ('${securityData.employee_id}','${securityData.security_id}','${securityData.is_allowed}', '${date}', '${time}','${securityData.device_id}', '${now}', '${now}') RETURNING *`
     );
     return res.status(RestAPI.STATUSCODE.ok).send({
       statusCode: RestAPI.STATUSCODE.ok,
@@ -85,9 +94,50 @@ const getSecurityManagementById = async (req, res) => {
 
 const getAllSecurityManagement = async (req, res) => {
   try {
-    var allSecurityManagements =
-      await securityController.getEmployeeSecurityDetails();
+    var allSecurityManagements = await securityController.getEmployeeSecurityDetails();
     var allJobs = allSecurityManagements.rows;
+    
+    var filterQuery = req.query;
+    var fromDate = moment.utc(filterQuery.from_date, "DD/MM/YYYY").toDate();
+    var toDate = moment.utc(filterQuery.to_date, "DD/MM/YYYY").toDate();
+  
+    // search added
+    if (Object.keys(filterQuery).length !== 0)
+    {
+      if (filterQuery.from_date && filterQuery.to_date) {
+        allJobs = allJobs.filter(
+          (item) =>
+            new Date(item.date) >= fromDate && new Date(item.date) <= toDate
+        );
+      }
+      if (filterQuery.searchString) {
+        allJobs = allJobs.filter(
+          (item) =>
+            item.name
+              .toLowerCase()
+              .includes(filterQuery.searchString?.toLowerCase()) ||
+            item.sub_team
+              .toLowerCase()
+              .includes(filterQuery.searchString?.toLowerCase()) ||
+            item.employee_id
+              .toLowerCase()
+              .includes(filterQuery.searchString?.toLowerCase()) ||
+            item.security_name
+              .toLowerCase()
+              .includes(filterQuery.searchString?.toLowerCase()) 
+        );
+      }
+      if (filterQuery.security_name) {
+        allJobs = allJobs.filter(
+          (item) => item.security_name == filterQuery.security_name
+        );
+      }
+      if (filterQuery.sub_team) {
+        allJobs = allJobs.filter(
+          (item) => item.sub_team == filterQuery.sub_team
+        );
+      }
+    }
 
     return res.status(RestAPI.STATUSCODE.ok).send({
       statusCode: RestAPI.STATUSCODE.ok,
@@ -145,7 +195,7 @@ const replaceSecurityManagement = async (req, res) => {
       });
     }
 
-    const updateQuery = `UPDATE security_managements SET employee_id='${securityData.employee_id}', security_id='${securityData.security_id}', status='${securityData.status}',  updated_at = '${now}' WHERE id='${req.params.id}'`;
+    const updateQuery = `UPDATE security_managements SET employee_id='${securityData.employee_id}', security_id='${securityData.security_id}', is_allowed='${securityData.is_allowed}', date ='${securityData.date}', time = '${securityData.time}',device_id ='${securityData.device_id}', updated_at = '${now}' WHERE id='${req.params.id}'`;
 
     await db.query(updateQuery);
     const updatedData = await findBySecurity;
@@ -185,12 +235,12 @@ const updateSecurityManagement = async (req, res) => {
       securityData.security_id == null
         ? isSecurityManagementExist.rows[0].security_id
         : securityData.security_id;
-    const updateStatus =
-      securityData.status == null
-        ? isSecurityManagementExist.rows[0].status
-        : securityData.status;
+    const updateIsAllowed =
+      securityData.is_allowed == null
+        ? isSecurityManagementExist.rows[0].is_allowed
+        : securityData.is_allowed;
 
-    const updateQuery = `UPDATE security_managements SET employee_id='${updateEmployee_id}', security_id='${updateUser_id}', status='${updateStatus}',  updated_at = '${now}' WHERE id='${req.params.id}'`;
+    const updateQuery = `UPDATE security_managements SET employee_id='${updateEmployee_id}', security_id='${updateUser_id}', is_allowed='${updateIsAllowed}',  updated_at = '${now}' WHERE id='${req.params.id}'`;
 
     await db.query(updateQuery);
     const updatedData = await query;
@@ -236,6 +286,39 @@ const deleteSecurityManagement = async (req, res) => {
   }
 };
 
+const getEmployeeTracking = async (req, res) => {
+  try 
+  {
+    const isEmployeeExist = await db.query(`SELECT DISTINCT ON (employee_id) *
+      FROM "employee_traking"
+      ORDER BY employee_id, time ASC`);
+    var employeeDetails = isEmployeeExist.rows;
+    var filterQuery = req.query;
+    // filter by employee_id
+    if (Object.keys(filterQuery).length !== 0) {
+      if (filterQuery.employee_id) {
+        employeeDetails = employeeDetails.filter(
+          (e) => e.employee_id == filterQuery.employee_id
+        );
+      }
+    }
+    
+   return res.status(RestAPI.STATUSCODE.ok).send({
+    statusCode: RestAPI.STATUSCODE.ok,
+    message: enMessage.listed_success,
+     data: employeeDetails,
+  });
+} catch (err) {
+  console.log("Error :", err);
+  return res.status(RestAPI.STATUSCODE.internalServerError).send({
+    statusCode: RestAPI.STATUSCODE.internalServerError,
+    message: enMessage.listed_failure,
+    error: err,
+  });
+}
+
+}
+
 module.exports = {
   createSecurityManagement,
   getSecurityManagementById,
@@ -243,4 +326,5 @@ module.exports = {
   replaceSecurityManagement,
   updateSecurityManagement,
   deleteSecurityManagement,
+  getEmployeeTracking
 };

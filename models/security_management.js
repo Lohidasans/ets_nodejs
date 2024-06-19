@@ -16,7 +16,10 @@ module.exports = (sequelize, DataTypes) => {
   security_management.init({
     employee_id: DataTypes.STRING,
     security_id: DataTypes.INTEGER,
-    status: DataTypes.INTEGER
+    is_allowed: DataTypes.BOOLEAN,
+    date: DataTypes.DATE,
+    time: DataTypes.TIME,
+    device_id: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'security_management',
