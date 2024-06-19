@@ -16,6 +16,9 @@ const subTeamRouter = require("./routes/teamServiceRoute/subTeamRouters");
 //guestRouters
 const guestRouter = require("./routes/guestServiceRoute/guestRouters");
 
+//gateRouters
+const gateRouter = require("./routes/gateManagementRoute/gateManagementRouters");
+
 //employeeRouters
 const employeeProfileRouter = require("./routes/employeeServiceRoute/employeeProfileRouters");
 const employeeJobRouter = require("./routes/employeeServiceRoute/employeeJobRouters");
@@ -59,6 +62,9 @@ app.use("/", subTeamRouter);
 
 //guestRouters
 app.use("/", guestRouter);
+
+//gateRouters
+app.use("/", gateRouter);
 
 //employeeRouters
 app.use("/", employeeProfileRouter);

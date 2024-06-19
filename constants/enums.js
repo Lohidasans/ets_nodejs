@@ -14,7 +14,7 @@ const SECURITYSTATUS = {
   allowOutside: 2,
 }
 
-const ABSENTSTATUS = {
+const GATEOPTIONSTATUS = {
   present: 1,
   absent: 2,
   onduty: 3,
@@ -35,6 +35,6 @@ const STATUSCODE = {
 module.exports = {
   PERMISSIONS,
   SECURITYSTATUS,
-  ABSENTSTATUS,
+  GATEOPTIONSTATUS,
   STATUSCODE,
 };

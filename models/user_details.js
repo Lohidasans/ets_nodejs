@@ -15,7 +15,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   user_details.init({
     employee_id: DataTypes.STRING,
-    employee_name: DataTypes.STRING
+    employee_name: DataTypes.STRING,
+    last_updated_time: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'user_details',

@@ -101,7 +101,23 @@ const employee_category = [
     id: "2",
     category: "temporary"
   }
-]
+];
+
+const gate_options_data = [
+  {
+    id: "1",
+    option: "present"
+  },
+  {
+    id: "2",
+    option: "absent"
+  },
+  {
+    id: "3",
+    option: "onduty"
+  }
+];
+
 module.exports = {
   user_type_data,
   shift_data,
@@ -109,5 +125,6 @@ module.exports = {
   team_type_data,
   team_data,
   state_data,
-  employee_category
+  employee_category,
+  gate_options_data
 };
