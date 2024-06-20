@@ -95,11 +95,9 @@ const replaceGateManagement = async (req, res) => {
     try {
         const now = new Date().toISOString();
         const gateData = req.body;
-        // const isGateManagementExist = await db.query(
-        //     `SELECT * FROM gate_managements WHERE id = $1`,
-        //     [req.params.id]
-        // );     
-        const isGateManagementExist = await findOne("gate_managements", "id", req.params.id);
+          
+        const query = findOne("gate_managements", "id", req.params.id);
+        const isGateManagementExist = await query;
         if (isGateManagementExist.rowCount == 0) {
             return res.status(RestAPI.STATUSCODE.notFound).send({
                 statusCode: RestAPI.STATUSCODE.notFound,
@@ -128,11 +126,7 @@ const replaceGateManagement = async (req, res) => {
 
         await db.query(updateQuery);
 
-        // const updatedData = await db.query(
-        //     `SELECT * FROM gate_managements WHERE id=$1`,
-        //     [req.params.id]
-        // );
-        const updatedData = await findOne("gate_managements", "id", req.params.id);
+        const updatedData = await query;
         return res.status(RestAPI.STATUSCODE.ok).send({
             statusCode: RestAPI.STATUSCODE.ok,
             message: enMessage.security_management_updation_success,
@@ -152,11 +146,8 @@ const updateGateManagement = async (req, res) => {
     try {
         const now = new Date().toISOString();
         const gateData = req.body;
-        // const isGateManagementExist = await db.query(
-        //     `SELECT * FROM gate_managements WHERE id = $1`,
-        //     [req.params.id]
-        // );
-        const isGateManagementExist = await findOne("gate_managements", "id", req.params.id);
+        const query = findOne("gate_managements", "id", req.params.id);
+        const isGateManagementExist = await query;
         if (isGateManagementExist.rowCount == 0) {
             return res.status(RestAPI.STATUSCODE.notFound).send({
                 statusCode: RestAPI.STATUSCODE.notFound,
@@ -209,11 +200,7 @@ const updateGateManagement = async (req, res) => {
         const updateQuery = `UPDATE gate_managements SET employee_id='${updateEmployee_id}', employee_name='${updateEmployee_Name}', authorized_name='${updateAuthorizedName}', options ='${updateOptions}', reason = '${updateReason}', in_date_time = '${updateInDateTime}', updated_at = '${now}' WHERE id='${req.params.id}'`;
 
         await db.query(updateQuery);
-        // const updatedData = await db.query(
-        //     `SELECT * FROM gate_managements WHERE id=$1`,
-        //     [req.params.id]
-        // );
-        const updatedData = await findOne("gate_managements", "id", req.params.id);
+        const updatedData = await query;
         return res.status(RestAPI.STATUSCODE.ok).send({
             statusCode: RestAPI.STATUSCODE.ok,
             message: enMessage.security_management_updation_success,
@@ -231,10 +218,6 @@ const updateGateManagement = async (req, res) => {
 
 const deleteGateManagement = async (req, res) => {
     try {
-        // const isGateManagementExist = await db.query(
-        //     `SELECT * FROM gate_managements WHERE id = $1`,
-        //     [req.params.id]
-        // );
         const isGateManagementExist = await findOne("gate_managements", "id", req.params.id);
         if (isGateManagementExist.rowCount == 0) {
             return res.status(RestAPI.STATUSCODE.notFound).send({
