@@ -171,6 +171,7 @@ const getAllUsers = async (req, res) => {
     });
   }
 };
+
 const getUserById = async (req, res) => {
   try {
     const users = await db.query(

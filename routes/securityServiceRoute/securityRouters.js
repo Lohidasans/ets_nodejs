@@ -34,5 +34,10 @@ router.get(
   "/api/v1/getUnEnteredEmployees",
   securityService.getUnEnteredEmployees
 );
+router.get(
+  "/api/v1/getAllSecurities",
+  securityService.getAllSecurities
+);
+
 
 module.exports = router;
