@@ -7,7 +7,6 @@ const RestAPI = require("../../constants/enums");
 const securityController = require("../../controllers/securityController/securityController");
 const { findOne } = require("../../query/common");
 const moment = require("moment");
-const { isColString } = require("sequelize/lib/utils");
 
 const createSecurityManagement = async (req, res) => {
   try {
@@ -290,10 +289,9 @@ const deleteSecurityManagement = async (req, res) => {
     });
   }
 };
-
+// Get the punched date and Time from employee_tracking table
 const getEmployeeTracking = async (req, res) => {
-  try 
-  {
+  try {
     const isEmployeeExist = await db.query(`SELECT DISTINCT ON (employee_id) *
       FROM "employee_traking" WHERE date = CURRENT_DATE - INTERVAL '1 day'
       ORDER BY employee_id, time ASC`);
@@ -314,21 +312,50 @@ const getEmployeeTracking = async (req, res) => {
       return e;
     });
     
-   return res.status(RestAPI.STATUSCODE.ok).send({
-    statusCode: RestAPI.STATUSCODE.ok,
-    message: enMessage.listed_success,
-     data: employeeDetails,
-  });
-} catch (err) {
-  console.log("Error :", err);
-  return res.status(RestAPI.STATUSCODE.internalServerError).send({
-    statusCode: RestAPI.STATUSCODE.internalServerError,
-    message: enMessage.listed_failure,
-    error: err,
-  });
-}
+    return res.status(RestAPI.STATUSCODE.ok).send({
+      statusCode: RestAPI.STATUSCODE.ok,
+      message: enMessage.listed_success,
+      data: employeeDetails,
+    });
+  } catch (err) {
+    console.log("Error :", err);
+    return res.status(RestAPI.STATUSCODE.internalServerError).send({
+      statusCode: RestAPI.STATUSCODE.internalServerError,
+      message: enMessage.listed_failure,
+      error: err,
+    });
+  }
+};
+// Employee_in drop down - punched but not entered employee
+const getUnEnteredEmployees = async (req, res) => {
+  try {
+    const unenteredEmployees = await db.query(`SELECT DISTINCT ON (e.employee_id)
+                                                  e.employee_id,
+                                                  e.date,
+                                                  e.time,
+                                                  e.device_id
+                                            FROM employee_traking AS e
+                                            LEFT JOIN security_managements AS s ON e.employee_id = s.employee_id
+                                            WHERE s.employee_id IS NULL
+                                              AND e.date = CURRENT_DATE - INTERVAL '1 day'
+                                            ORDER BY e.employee_id, e.date, e.time;`);
+    
 
-}
+    return res.status(RestAPI.STATUSCODE.ok).send({
+      statusCode: RestAPI.STATUSCODE.ok,
+      message: enMessage.listed_success,
+      data: await unenteredEmployees.rows,
+    });
+  }
+  catch (err) {
+    console.log("Error :", err);
+    return res.status(RestAPI.STATUSCODE.internalServerError).send({
+      statusCode: RestAPI.STATUSCODE.internalServerError,
+      message: enMessage.listed_failure,
+      error: err,
+    });
+  }
+};
 
 module.exports = {
   createSecurityManagement,
@@ -337,5 +364,6 @@ module.exports = {
   replaceSecurityManagement,
   updateSecurityManagement,
   deleteSecurityManagement,
-  getEmployeeTracking
+  getEmployeeTracking,
+  getUnEnteredEmployees
 };

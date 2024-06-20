@@ -30,5 +30,9 @@ router.get(
   "/api/v1/getEmployeeTrackingDetails",
   securityService.getEmployeeTracking
 );
+router.get(
+  "/api/v1/getUnEnteredEmployees",
+  securityService.getUnEnteredEmployees
+);
 
 module.exports = router;
