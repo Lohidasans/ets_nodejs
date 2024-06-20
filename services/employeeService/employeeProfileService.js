@@ -55,7 +55,7 @@ const createEmployeeProfile = async (req, res) => {
 
 const getEmployeeProfileById = async (req, res) => {
   try {
-    const query = findOne("employee_profiles", "id", req.params.id);
+    const query = findOne("employee_profiles", "employee_id", req.params.id);
     const isEmployeeProfileExist = await query;
     if (isEmployeeProfileExist.rowCount == 0) {
       return res.status(RestAPI.STATUSCODE.notFound).send({
