@@ -7,19 +7,14 @@ const RestAPI = require("../../constants/enums");
 const securityController = require("../../controllers/securityController/securityController");
 const { findOne } = require("../../query/common");
 const moment = require("moment");
+const { isColString } = require("sequelize/lib/utils");
 
 const createSecurityManagement = async (req, res) => {
   try {
     const now = new Date().toISOString();
     const securityData = req.body;
-    const date = securityData.date.split('T')[0]; // Extracts the date part
-    const time = securityData.time.split(' ')[0];
-
-    console.log("DATE" , date);
-    console.log("Time" , time);
-
-
-    
+    const date = new Date(securityData.date).toISOString();
+      
     const findByEmployee = findOne(
       "employee_profiles",
       "employee_id",
@@ -50,12 +45,17 @@ const createSecurityManagement = async (req, res) => {
     }
 
     const securityQuery = await db.query(
-      `INSERT INTO security_managements (employee_id,security_id, is_allowed, date, time, device_id, created_at, updated_at) VALUES ('${securityData.employee_id}','${securityData.security_id}','${securityData.is_allowed}', '${date}', '${time}','${securityData.device_id}', '${now}', '${now}') RETURNING *`
+      `INSERT INTO security_managements (employee_id,security_id, is_allowed, date, time, device_id, created_at, updated_at) VALUES ('${securityData.employee_id}','${securityData.security_id}','${securityData.is_allowed}', '${date}', '${securityData.time}','${securityData.device_id}', '${now}', '${now}') RETURNING *`
     );
+
+    // Convert dates back to local time zone before sending response
+    const responseData = securityQuery.rows[0];
+    responseData.date = new Date(responseData.date).toLocaleString('en-GB', { timeZone: 'Asia/Kolkata' });
+
     return res.status(RestAPI.STATUSCODE.ok).send({
       statusCode: RestAPI.STATUSCODE.ok,
       message: enMessage.security_management_creation_success,
-      data: securityQuery.rows[0],
+      data: responseData,
     });
   } catch (err) {
     console.log("Error :", err);
@@ -98,8 +98,8 @@ const getAllSecurityManagement = async (req, res) => {
     var allJobs = allSecurityManagements.rows;
     
     var filterQuery = req.query;
-    var fromDate = moment.utc(filterQuery.from_date, "DD/MM/YYYY").toDate();
-    var toDate = moment.utc(filterQuery.to_date, "DD/MM/YYYY").toDate();
+    var fromDate = moment(filterQuery.from_date, "DD/MM/YYYY").toDate();
+    var toDate = moment(filterQuery.to_date, "DD/MM/YYYY").toDate();
   
     // search added
     if (Object.keys(filterQuery).length !== 0)
@@ -107,7 +107,7 @@ const getAllSecurityManagement = async (req, res) => {
       if (filterQuery.from_date && filterQuery.to_date) {
         allJobs = allJobs.filter(
           (item) =>
-            new Date(item.date) >= fromDate && new Date(item.date) <= toDate
+            new Date(item.in_date) >= fromDate && new Date(item.in_date) <= toDate
         );
       }
       if (filterQuery.searchString) {
@@ -138,6 +138,11 @@ const getAllSecurityManagement = async (req, res) => {
         );
       }
     }
+    // Convert dates to local time zone format for all entries
+    allJobs = allJobs.map((e) => {
+      e.in_date = new Date(e.in_date).toLocaleString('en-GB', { timeZone: 'Asia/Kolkata' });
+      return e;
+    });
 
     return res.status(RestAPI.STATUSCODE.ok).send({
       statusCode: RestAPI.STATUSCODE.ok,
@@ -290,8 +295,9 @@ const getEmployeeTracking = async (req, res) => {
   try 
   {
     const isEmployeeExist = await db.query(`SELECT DISTINCT ON (employee_id) *
-      FROM "employee_traking"
+      FROM "employee_traking" WHERE date = CURRENT_DATE - INTERVAL '1 day'
       ORDER BY employee_id, time ASC`);
+    
     var employeeDetails = isEmployeeExist.rows;
     var filterQuery = req.query;
     // filter by employee_id
@@ -302,6 +308,11 @@ const getEmployeeTracking = async (req, res) => {
         );
       }
     }
+    // Convert dates to local time zone format for all entries
+    employeeDetails = employeeDetails.map((e) => {
+      e.date = new Date(e.date).toLocaleString('en-GB', { timeZone: 'Asia/Kolkata' });
+      return e;
+    });
     
    return res.status(RestAPI.STATUSCODE.ok).send({
     statusCode: RestAPI.STATUSCODE.ok,

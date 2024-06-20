@@ -13,6 +13,7 @@ const getEmployeeSecurityDetails = async () => {
             INNER JOIN security_managements on employee_profiles.employee_id = security_managements.employee_id
             INNER JOIN users on security_managements.security_id = users.id
             INNER JOIN sub_teams on employee_profiles.sub_team_id::int = sub_teams.id
+            WHERE DATE(security_managements.date) =  CURRENT_DATE - INTERVAL '1 day'
             GROUP BY 
                 employee_profiles.employee_id,
                 employee_profiles.name,
