@@ -13,7 +13,7 @@ const createSecurityManagement = async (req, res) => {
     const now = new Date().toISOString();
     const securityData = req.body;
     const date = new Date(securityData.date).toISOString();
-      
+
     const findByEmployee = findOne(
       "employee_profiles",
       "employee_id",
@@ -95,14 +95,13 @@ const getAllSecurityManagement = async (req, res) => {
   try {
     var allSecurityManagements = await securityController.getEmployeeSecurityDetails();
     var allJobs = allSecurityManagements.rows;
-    
+
     var filterQuery = req.query;
     var fromDate = moment(filterQuery.from_date, "DD/MM/YYYY").toDate();
     var toDate = moment(filterQuery.to_date, "DD/MM/YYYY").toDate();
-  
+
     // search added
-    if (Object.keys(filterQuery).length !== 0)
-    {
+    if (Object.keys(filterQuery).length !== 0) {
       if (filterQuery.from_date && filterQuery.to_date) {
         allJobs = allJobs.filter(
           (item) =>
@@ -123,7 +122,7 @@ const getAllSecurityManagement = async (req, res) => {
               .includes(filterQuery.searchString?.toLowerCase()) ||
             item.security_name
               .toLowerCase()
-              .includes(filterQuery.searchString?.toLowerCase()) 
+              .includes(filterQuery.searchString?.toLowerCase())
         );
       }
       if (filterQuery.security_name) {
@@ -295,7 +294,7 @@ const getEmployeeTracking = async (req, res) => {
     const isEmployeeExist = await db.query(`SELECT DISTINCT ON (employee_id) *
       FROM "employee_traking" WHERE date = CURRENT_DATE - INTERVAL '1 day'
       ORDER BY employee_id, time ASC`);
-    
+
     var employeeDetails = isEmployeeExist.rows;
     var filterQuery = req.query;
     // filter by employee_id
@@ -311,7 +310,7 @@ const getEmployeeTracking = async (req, res) => {
       e.date = new Date(e.date).toLocaleString('en-GB', { timeZone: 'Asia/Kolkata' });
       return e;
     });
-    
+
     return res.status(RestAPI.STATUSCODE.ok).send({
       statusCode: RestAPI.STATUSCODE.ok,
       message: enMessage.listed_success,
@@ -339,12 +338,11 @@ const getUnEnteredEmployees = async (req, res) => {
                                             WHERE s.employee_id IS NULL
                                               AND e.date = CURRENT_DATE - INTERVAL '1 day'
                                             ORDER BY e.employee_id, e.date, e.time;`);
-    
 
     return res.status(RestAPI.STATUSCODE.ok).send({
       statusCode: RestAPI.STATUSCODE.ok,
       message: enMessage.listed_success,
-      data: await unenteredEmployees.rows,
+      data: unenteredEmployees.rows,
     });
   }
   catch (err) {
