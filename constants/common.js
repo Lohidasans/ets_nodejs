@@ -94,11 +94,11 @@ const state_data = [
 
 const employee_category = [
   {
-    id: "1",
+    id: 1,
     category: "permanent"    
   },
   {
-    id: "2",
+    id: 2,
     category: "temporary"
   }
 ];
