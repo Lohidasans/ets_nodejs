@@ -15,10 +15,13 @@ module.exports = {
       proof_name: {
         type: Sequelize.STRING,
       },
-      proof_number: {
+      proof_number: {  
         type: Sequelize.STRING,
       },
-      id_proof_url: {
+      id_proof_url_front: {
+        type: Sequelize.STRING,
+      },
+      id_proof_url_back: {
         type: Sequelize.STRING,
       },
       is_deleted: {
