@@ -39,7 +39,7 @@ const createSubTeam = async (req, res) => {
 
 const getSubTeamById = async (req, res) => {
   try {
-    const query = findOne("sub_teams", "id", req.params.id);
+    const query = findOne("sub_teams", "team_id", req.params.id);
     const isTeamExist = await query;
     if (isTeamExist.rowCount == 0) {
       return res.status(RestAPI.STATUSCODE.notFound).send({
