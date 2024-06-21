@@ -295,7 +295,7 @@ const getEmployeeTracking = async (req, res) => {
     const isEmployeeExist = await db.query(`SELECT 
                                 DISTINCT ON (employee_id) *
                                 FROM "employee_traking" 
-                                WHERE date = CURRENT_DATE - INTERVAL '2 day'
+                                WHERE date = CURRENT_DATE
                                 ORDER BY employee_id, time ASC`);
 
     var employeeDetails = isEmployeeExist.rows;
@@ -332,14 +332,17 @@ const getEmployeeTracking = async (req, res) => {
 const getUnEnteredEmployees = async (req, res) => {
   try {
     const unenteredEmployees = await db.query(`SELECT DISTINCT ON (e.employee_id)
-                                    e.employee_id,
-                                    e.date,
-                                    e.time,
-                                    e.device_id
-                                FROM employee_traking AS e
-                                LEFT JOIN security_managements AS s ON e.employee_id = s.employee_id AND s.date = CURRENT_DATE
-                                WHERE  (s.employee_id IS NULL OR s.employee_id IS NOT NULL) AND e.date = CURRENT_DATE 
-                                ORDER BY e.employee_id, e.date, e.time;`);
+                                                  e.employee_id,
+                                                  e.date,
+                                                  e.time,
+                                                  e.device_id
+                                              FROM employee_traking AS e
+                                              LEFT JOIN security_managements AS s 
+                                                  ON e.employee_id = s.employee_id 
+                                                  AND s.date = CURRENT_DATE
+                                              WHERE e.date = CURRENT_DATE 
+                                                  AND s.employee_id IS NULL
+                                              ORDER BY e.employee_id, e.date, e.time;`);
 
     return res.status(RestAPI.STATUSCODE.ok).send({
       statusCode: RestAPI.STATUSCODE.ok,
