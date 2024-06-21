@@ -75,7 +75,7 @@ const getAllSubTeam = async (req, res) => {
         FROM
             sub_teams AS s
             LEFT JOIN teams AS t ON s.team_id = t.id
-            LEFT JOIN employee_profiles AS ep ON s.team_id = ep.team_id
+            LEFT JOIN employee_profiles AS ep ON s.team_id = ep.team_id and ep.sub_team_id = s.id::character varying
         GROUP BY
                 t.team_name,
                 s.sub_team,
