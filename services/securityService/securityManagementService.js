@@ -295,7 +295,7 @@ const getEmployeeTracking = async (req, res) => {
     const isEmployeeExist = await db.query(`SELECT 
                                 DISTINCT ON (employee_id) *
                                 FROM "employee_traking" 
-                                WHERE date = CURRENT_DATE - INTERVAL '1 day'
+                                WHERE date = CURRENT_DATE - INTERVAL '2 day'
                                 ORDER BY employee_id, time ASC`);
 
     var employeeDetails = isEmployeeExist.rows;
@@ -332,15 +332,14 @@ const getEmployeeTracking = async (req, res) => {
 const getUnEnteredEmployees = async (req, res) => {
   try {
     const unenteredEmployees = await db.query(`SELECT DISTINCT ON (e.employee_id)
-                                                  e.employee_id,
-                                                  e.date,
-                                                  e.time,
-                                                  e.device_id
-                                            FROM employee_traking AS e
-                                            LEFT JOIN security_managements AS s ON e.employee_id = s.employee_id
-                                            WHERE s.employee_id IS NULL
-                                              AND e.date = CURRENT_DATE - INTERVAL '1 day'
-                                            ORDER BY e.employee_id, e.date, e.time;`);
+                                    e.employee_id,
+                                    e.date,
+                                    e.time,
+                                    e.device_id
+                                FROM employee_traking AS e
+                                LEFT JOIN security_managements AS s ON e.employee_id = s.employee_id AND s.date = CURRENT_DATE
+                                WHERE  (s.employee_id IS NULL OR s.employee_id IS NOT NULL) AND e.date = CURRENT_DATE 
+                                ORDER BY e.employee_id, e.date, e.time;`);
 
     return res.status(RestAPI.STATUSCODE.ok).send({
       statusCode: RestAPI.STATUSCODE.ok,
@@ -365,15 +364,14 @@ const getAllSecurities = async (req, res) => {
       (type) => type.user_type === "Security"
     );
     const securityDetails = await db.query(
-      `SELECT id, name , user_name, user_type from users where user_type = $1`,
+      `SELECT id, name, user_name, user_type from users where user_type = $1`,
       [userType.id]
     );
     return res.status(RestAPI.STATUSCODE.ok).send({
       statusCode: RestAPI.STATUSCODE.ok,
       message: enMessage.listed_success,
       data: securityDetails.rows
-    });
-    
+    });    
   }
   catch (err)
   {
