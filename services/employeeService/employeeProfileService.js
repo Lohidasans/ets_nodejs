@@ -95,9 +95,11 @@ const getAllEmployeeProfile = async (req, res) => {
     // Map function to add shift_time to each profile
     var profilesWithShiftTime = allEmployeeProfiles.rows.map((profile) => {
       var shift = shift_data.find((shift) => shift.id === profile.shift);
+      var empCategory = employee_category.find((category) => category.id == profile.employee_category)
       return {
         ...profile,
         shift_name: shift ? shift.schedule_time : null,
+        employee_category_name: empCategory ? empCategory.category : null
       };
     });
 
@@ -128,12 +130,12 @@ const getAllEmployeeProfile = async (req, res) => {
       }
       if (filterQuery.shift) {
         profilesWithShiftTime = profilesWithShiftTime.filter(
-          (item) => item.shift == filterQuery.shift
+          (item) => item.shift_name == filterQuery.shift_name
         );
       }
       if (filterQuery.employee_category) {
         profilesWithShiftTime = profilesWithShiftTime.filter(
-          (item) => item.employee_category == filterQuery.employee_category
+          (item) => item.employee_category_name == filterQuery.employee_category_name
         );
       }
     }
