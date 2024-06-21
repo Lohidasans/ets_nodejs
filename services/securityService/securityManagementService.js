@@ -1,7 +1,7 @@
 const db = require("../../config/dbConfig");
 const en = require("../../constants/en.json");
 const enMessage = require("../../constants/enMessage.json");
-const { user_type_data } = require("../../constants/common");
+const { user_type_data, team_type_data, employee_category } = require("../../constants/common");
 const user = require("../../constants/enums");
 const RestAPI = require("../../constants/enums");
 const securityController = require("../../controllers/securityController/securityController");
@@ -393,24 +393,46 @@ const getAllSecurities = async (req, res) => {
 const getEmployeeCardDetails = async (req, res) => {
   try
   {
-    const empCardDetails = ``;
+    const empCardDetails = await db.query(`SELECT DISTINCT ON (et.employee_id)
+                      ep.name,
+                      ep.employee_id,
+                      ep.image_url,
+                      ep.employee_category,
+                      ep.sub_team_id,
+                      s.team_type_id,
+                      sm.is_allowed,
+                      et.date,
+                      et.time
+                      from employee_profiles as ep
+                      left join sub_teams as s on ep.sub_team_id = s.id::CHARACTER VARYING and ep.team_id = s.team_id
+                      left join employee_traking as et on ep.employee_id = et.employee_id
+                      left join security_managements as sm on et.employee_id = sm.employee_id and et.date = sm.date
+                      where et."date" = CURRENT_DATE
+                      order by et.employee_id, et.time asc`);
+    
+    var employeeResponse = empCardDetails.rows.map((card) => {
+      var empCategory = employee_category.find((category) => category.id == card.employee_category)
+      var teamType = team_type_data.find((team) => team.id == card.team_type_id)
+      return {
+        ...card,
+        employee_category_name: empCategory ? empCategory.category : null,
+        team_type_name: teamType ? teamType.team_type : null
+      };
+    });
     return res.status(RestAPI.STATUSCODE.ok).send({
       statusCode: RestAPI.STATUSCODE.ok,
       message: enMessage.listed_success,
-      data: empCardDetails,
-    })
-
-    
+      data: employeeResponse,
+    });    
   }
   catch (err)
   {
     console.log("Error: ", err);
-    return res.status(RestAPI.SECURITYSTATUS.internalServerError).send({
-      statusCode: RestAPI.SECURITYSTATUS.internalServerError,
+    return res.status(RestAPI.STATUSCODE.internalServerError).send({
+      statusCode: RestAPI.STATUSCODE.internalServerError,
       message: enMessage.listed_failure,
       error: err,
-    })
-
+    });
   }
 }
 module.exports = {

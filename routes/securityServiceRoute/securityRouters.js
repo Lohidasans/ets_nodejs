@@ -38,6 +38,10 @@ router.get(
   "/api/v1/getAllSecurities",
   securityService.getAllSecurities
 );
+router.get(
+  "/api/v1/getEmployeeCardDetails",
+  securityService.getEmployeeCardDetails
+);
 
 
 module.exports = router;
