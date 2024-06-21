@@ -138,9 +138,12 @@ const getAllSecurityManagement = async (req, res) => {
       }
     }
     // Convert dates to local time zone format for all entries
-    allJobs = allJobs.map((e) => {
+    allJobs = allJobs.map((e, index) => {
       e.in_date = new Date(e.in_date).toLocaleString('en-GB', { timeZone: 'Asia/Kolkata' });
-      return e;
+      return {
+        ...e,
+        sNo: index + 1
+      };
     });
 
     return res.status(RestAPI.STATUSCODE.ok).send({
@@ -386,6 +389,30 @@ const getAllSecurities = async (req, res) => {
     });
   }
 }
+// Employee Card - API
+const getEmployeeCardDetails = async (req, res) => {
+  try
+  {
+    const empCardDetails = ``;
+    return res.status(RestAPI.STATUSCODE.ok).send({
+      statusCode: RestAPI.STATUSCODE.ok,
+      message: enMessage.listed_success,
+      data: empCardDetails,
+    })
+
+    
+  }
+  catch (err)
+  {
+    console.log("Error: ", err);
+    return res.status(RestAPI.SECURITYSTATUS.internalServerError).send({
+      statusCode: RestAPI.SECURITYSTATUS.internalServerError,
+      message: enMessage.listed_failure,
+      error: err,
+    })
+
+  }
+}
 module.exports = {
   createSecurityManagement,
   getSecurityManagementById,
@@ -395,5 +422,6 @@ module.exports = {
   deleteSecurityManagement,
   getEmployeeTracking,
   getUnEnteredEmployees,
-  getAllSecurities
+  getAllSecurities,
+  getEmployeeCardDetails
 };
