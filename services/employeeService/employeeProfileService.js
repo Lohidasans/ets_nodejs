@@ -79,17 +79,17 @@ const getAllEmployeeProfile = async (req, res) => {
   try {
     var allEmployeeProfiles = await db.query(
       `SELECT
-            employee_profiles.*,
-            teams.team_name AS team_name,
-            sub_teams.sub_team AS sub_team_name
-            FROM employee_profiles
-            INNER JOIN teams ON employee_profiles.team_id = teams.id
-            INNER JOIN sub_teams ON employee_profiles.team_id = sub_teams.id
-            WHERE employee_profiles.is_deleted = ${false}
-            GROUP BY teams.team_name,
-            sub_teams.sub_team,
-            employee_profiles.id
-            ORDER BY employee_profiles.id
+            ep.*,
+            t.team_name AS team_name,
+            s.sub_team AS sub_team_name
+            FROM employee_profiles As ep
+            INNER JOIN teams  As t ON ep.team_id = t.id
+            INNER JOIN sub_teams As s ON ep.sub_team_id = s.id::character varying
+            WHERE ep.is_deleted = false and ep.team_id = s.team_id
+            GROUP BY t.team_name,
+            s.sub_team,
+            ep.id
+            ORDER BY ep.id;
         `
     );
     // Map function to add shift_time to each profile
