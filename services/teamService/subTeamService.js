@@ -74,8 +74,8 @@ const getAllSubTeam = async (req, res) => {
             COUNT(ep.sub_team_id) AS no_of_members
         FROM
             sub_teams AS s
-            INNER JOIN teams AS t ON s.team_id = t.id
-            INNER JOIN employee_profiles AS ep ON s.team_id = ep.team_id
+            LEFT JOIN teams AS t ON s.team_id = t.id
+            LEFT JOIN employee_profiles AS ep ON s.team_id = ep.team_id
         GROUP BY
                 t.team_name,
                 s.sub_team,
