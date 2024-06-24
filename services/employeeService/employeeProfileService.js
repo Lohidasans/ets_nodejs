@@ -57,8 +57,8 @@ const getEmployeeProfileById = async (req, res) => {
     const stateName = state_data.find((state) => state.id === Number(isEmployeeProfileExist.rows[0].state));
     const teamName = team_data.find((team) => team.id === Number(isEmployeeProfileExist.rows[0].team_id))
     const employeeCategory = employee_category.find((category) => category.id === Number(isEmployeeProfileExist.rows[0].employee_category))
-    const subteamName = findOne("sub_teams", "id", isEmployeeProfileExist.rows[0].sub_team_id);
-    const sub_team_name = await subteamName;
+    const subTeamName = findOne("sub_teams", "id", isEmployeeProfileExist.rows[0].sub_team_id);
+    const sub_team_name = await subTeamName;
     let result = { ...isEmployeeProfileExist.rows[0], sub_team_name: sub_team_name.rows[0].sub_team, employee_category: employeeCategory.category, team_name: teamName.team, state_name: stateName.state }
     return res.status(RestAPI.STATUSCODE.ok).send({
       statusCode: RestAPI.STATUSCODE.ok,
@@ -327,6 +327,27 @@ const frEnrol = async (req, res) => {
   }
 };
 
+const punchInEmployee = async (req, res) => {
+  try {
+    const { employee_id, employee_name, date, time, device_id } = req.body;
+    const employeePunchInQuery = await db.query(
+      `INSERT INTO employee_traking(employee_id, employee_name,date,time,device_id) VALUES ('${employee_id
+      }', '${employee_name}', '${date}','${time}','${device_id}') RETURNING *`
+    );
+    console.log(employeePunchInQuery)
+     return res.status(RestAPI.STATUSCODE.ok).send({
+      statusCode: RestAPI.STATUSCODE.ok,
+      message: "Employee PunchIn Successfully",
+    });
+  } catch (error) {
+    return res.status(RestAPI.STATUSCODE.internalServerError).send({
+      statusCode: RestAPI.STATUSCODE.internalServerError,
+      error: error.message,
+      data:employeePunchInQuery.rows[0]
+    });
+  }
+}
+
 module.exports = {
   createEmployeeProfile,
   getEmployeeProfileById,
@@ -337,4 +358,5 @@ module.exports = {
   deviceAssign,
   enrollUser,
   frEnrol,
+  punchInEmployee
 };
