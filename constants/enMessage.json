@@ -96,6 +96,13 @@
   "gate_management_deletion_success": "Gate Management Deleted Successfully",
   "gate_management_deletion_failure": "Failed to delete Gate Management",
 
+  "canteen_management_creation_success": "Canteen Management Created Successfully",
+  "canteen_management_creation_failure": "Failed to Create Canteen Management",
+  "canteen_management_updation_success": "Canteen Management Updated Successfully",
+  "canteen_management_updation_failure": "Failed to Update Canteen Management",
+  "canteen_management_deletion_success": "Canteen Management Deleted Successfully",
+  "canteen_management_deletion_failure": "Failed to delete Canteen Management",
+
   "upload_success": "Image uploaded successfully",
   "upload_failure": "Failed to upload the image",
   "file_deleted": "File deleted successfully",

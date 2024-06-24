@@ -29,6 +29,9 @@ const employeeOrnamentRouter = require("./routes/employeeServiceRoute/employeeOr
 //securityRouters
 const securityRouter = require("./routes/securityServiceRoute/securityRouters");
 
+//canteenRouters
+const canteenRouters = require("./routes/canteenServiceRoute/canteenServiceRouters");
+
 //commonServiceRoute
 const commonServiceRoute = require("./routes/commonServiceRoute/commonServiceRoute");
 
@@ -76,6 +79,9 @@ app.use("/", employeeOrnamentRouter);
 //securityRouters
 app.use("/", securityRouter);
 
+//canteenRouters
+app.use("/", canteenRouters);
+
 //Common
 app.use("/", commonServiceRoute);
 app.use("/", ImageUploadRoute);
@@ -91,7 +97,7 @@ app.use(function (err, req, res, next) {
 });
 
 app.use(function (req, res, next) {
-  next(createError(404));
+  next(createError(404)); 
 });
 
 app.listen({ port: 5000 }, async () => {
