@@ -298,7 +298,7 @@ const getEmployeeTracking = async (req, res) => {
     const isEmployeeExist = await db.query(`SELECT 
                                 DISTINCT ON (employee_id) *
                                 FROM "employee_traking" 
-                                WHERE date = CURRENT_DATE
+                                WHERE date = CURRENT_DATE and device_id = 1
                                 ORDER BY employee_id, time ASC`);
 
     var employeeDetails = isEmployeeExist.rows;
@@ -343,7 +343,7 @@ const getUnEnteredEmployees = async (req, res) => {
                                               LEFT JOIN security_managements AS s 
                                                   ON e.employee_id = s.employee_id 
                                                   AND s.date = CURRENT_DATE
-                                              WHERE e.date = CURRENT_DATE 
+                                              WHERE e.date = CURRENT_DATE and e.device_id = 1
                                                   AND s.employee_id IS NULL
                                               ORDER BY e.employee_id, e.date, e.time;`);
 
@@ -407,7 +407,7 @@ const getEmployeeCardDetails = async (req, res) => {
                       left join sub_teams as s on ep.sub_team_id = s.id::CHARACTER VARYING and ep.team_id = s.team_id
                       left join employee_traking as et on ep.employee_id = et.employee_id
                       left join security_managements as sm on et.employee_id = sm.employee_id and et.date = sm.date
-                      where et."date" = CURRENT_DATE
+                      where et."date" = CURRENT_DATE and et.device_id = 1
                       order by et.employee_id, et.time asc`);
     
     var employeeResponse = empCardDetails.rows.map((card) => {
